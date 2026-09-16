@@ -1,0 +1,45 @@
+{
+  "_README": "Contenido editorial pre-lanzamiento. Solo hechos confirmados por Rockstar o prensa mayor. Cada afirmacion lleva fuente.",
+  "items": [
+    {
+      "slug": "release-date",
+      "title": "GTA 6 Release Date: November 19, 2026",
+      "description": "Grand Theft Auto VI launches on November 19, 2026. Confirmed platforms, editions, and what Rockstar has actually said.",
+      "verified": true,
+      "sections": [
+        {
+          "h": "The confirmed date",
+          "p": "Rockstar Games has confirmed that Grand Theft Auto VI releases on <strong>November 19, 2026</strong>. Take-Two CEO Strauss Zelnick has publicly reaffirmed the date, stating there is no further delay planned."
+        },
+        {
+          "h": "Platforms at launch",
+          "p": "The game launches on current-generation consoles. Rockstar has historically released PC versions of mainline Grand Theft Auto titles later than the console release, and has not committed to a simultaneous PC launch."
+        },
+        {
+          "h": "What we are not claiming",
+          "p": "Anything not confirmed by Rockstar directly is marked as unconfirmed on this site. Leaked footage and datamined files circulating online have not been verified, and we do not publish them as fact."
+        }
+      ]
+    },
+    {
+      "slug": "about",
+      "title": "About Leonida HQ",
+      "description": "Who runs this site, where the data comes from, and how to submit a correction.",
+      "verified": true,
+      "sections": [
+        {
+          "h": "What this is",
+          "p": "An independent, fan-made reference site. We publish vehicle databases, business calculators, and maps, and we label every data point as either confirmed or unconfirmed."
+        },
+        {
+          "h": "Corrections",
+          "p": "If something here is wrong, tell us and we will fix it. Accuracy is the only reason anyone would come back."
+        },
+        {
+          "h": "Not official",
+          "p": "This site is not affiliated with Rockstar Games or Take-Two Interactive. All game trademarks are the property of their owners. We use them only to describe the game this site covers."
+        }
+      ]
+    }
+  ]
+}

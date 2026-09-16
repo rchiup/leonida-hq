@@ -1,0 +1,14 @@
+{
+  "_README": "Mismo criterio que vehicles.json: ejemplos hasta que existan datos reales.",
+  "items": [
+    {
+      "slug": "example-nightclub",
+      "name": "Example Nightclub",
+      "verified": false,
+      "purchaseCost": null,
+      "incomePerHour": null,
+      "upgradeCost": null,
+      "summary": "Entrada de ejemplo para la calculadora de negocios."
+    }
+  ]
+}

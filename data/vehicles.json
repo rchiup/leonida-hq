@@ -1,0 +1,27 @@
+{
+  "_README": "IMPORTANTE: estas entradas son EJEMPLOS para probar el generador. GTA VI no ha salido, asi que no hay stats reales todavia. El dia del lanzamiento se reemplaza este archivo con datos reales y 'verified' pasa a true. Nada con verified:false se indexa en Google.",
+  "items": [
+    {
+      "slug": "example-offroad-truck",
+      "name": "Example Offroad Truck",
+      "class": "Off-Road",
+      "verified": false,
+      "topSpeedMph": null,
+      "priceInGame": null,
+      "seats": 4,
+      "drivetrain": null,
+      "summary": "Segunda entrada de ejemplo para validar el indice y la paginacion."
+    },
+    {
+      "slug": "example-sports-coupe",
+      "name": "Example Sports Coupe",
+      "class": "Sports",
+      "verified": false,
+      "topSpeedMph": null,
+      "priceInGame": null,
+      "seats": 2,
+      "drivetrain": null,
+      "summary": "Entrada de ejemplo. Demuestra como se renderiza una ficha de vehiculo antes de tener datos confirmados."
+    }
+  ]
+}
