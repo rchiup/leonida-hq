@@ -1,0 +1,17 @@
+{
+  "siteName": "Leonida HQ",
+  "tagline": "Mapas, bases de datos y calculadoras de Leonida",
+  "domain": "https://leonidahq.com",
+  "lang": "en",
+  "locale": "en_US",
+  "launchISO": "2026-11-19T00:00:00Z",
+  "adsense": {
+    "enabled": false,
+    "client": "ca-pub-XXXXXXXXXXXXXXXX",
+    "slotTop": "0000000000",
+    "slotInline": "0000000000"
+  },
+  "analytics": {
+    "plausibleDomain": ""
+  }
+}

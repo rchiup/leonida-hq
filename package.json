@@ -1,0 +1,13 @@
+{
+  "name": "leonida-hq",
+  "version": "1.0.0",
+  "description": "Generador estatico de un sitio companion de videojuego. Sin dependencias.",
+  "type": "module",
+  "scripts": {
+    "build": "node build.js",
+    "serve": "node serve.js"
+  },
+  "dependencies": {
+    "playwright": "^1.63.0"
+  }
+}
