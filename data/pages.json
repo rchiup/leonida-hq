@@ -1,23 +1,115 @@
 {
-  "_README": "Contenido editorial pre-lanzamiento. Solo hechos confirmados por Rockstar o prensa mayor. Cada afirmacion lleva fuente.",
+  "_README": "Contenido editorial pre-lanzamiento. SOLO hechos confirmados por Rockstar/Take-Two o prensa mayor. Cada pagina distingue explicitamente lo confirmado de lo que no lo esta. No agregar nada basado en filtraciones.",
   "items": [
     {
       "slug": "release-date",
       "title": "GTA 6 Release Date: November 19, 2026",
-      "description": "Grand Theft Auto VI launches on November 19, 2026. Confirmed platforms, editions, and what Rockstar has actually said.",
+      "description": "Grand Theft Auto VI launches November 19, 2026 on PS5 and Xbox Series X|S. Confirmed date, pre-load time, and what Rockstar has actually said.",
       "verified": true,
       "sections": [
         {
           "h": "The confirmed date",
-          "p": "Rockstar Games has confirmed that Grand Theft Auto VI releases on <strong>November 19, 2026</strong>. Take-Two CEO Strauss Zelnick has publicly reaffirmed the date, stating there is no further delay planned."
+          "p": "Grand Theft Auto VI releases on <strong>November 19, 2026</strong>. The date is confirmed by Rockstar Games, and Take-Two CEO Strauss Zelnick has publicly reaffirmed it, stating there is no further delay planned. The game was previously delayed from earlier windows, so this is the date that currently stands."
+        },
+        {
+          "h": "Pre-load starts a week early",
+          "p": "Pre-loading opens at <strong>local midnight on November 12, 2026</strong> &mdash; seven days before launch. This applies to digital pre-orders and to boxed copies whose codes have been redeemed. If you want to play at launch rather than wait on a download, this is the date that matters."
         },
         {
           "h": "Platforms at launch",
-          "p": "The game launches on current-generation consoles. Rockstar has historically released PC versions of mainline Grand Theft Auto titles later than the console release, and has not committed to a simultaneous PC launch."
+          "p": "The game launches on <strong>PlayStation 5</strong> and <strong>Xbox Series X|S</strong>, with PS5 Pro enhancements. There is no PC version announced. See our <a href=\"/pc-version/\">PC version page</a> for what Rockstar has and has not said."
         },
         {
           "h": "What we are not claiming",
-          "p": "Anything not confirmed by Rockstar directly is marked as unconfirmed on this site. Leaked footage and datamined files circulating online have not been verified, and we do not publish them as fact."
+          "p": "Anything not confirmed by Rockstar directly is marked as unconfirmed on this site. Leaked footage and datamined files circulating online have not been verified, and we do not publish them as fact. Vehicle stats, mission lists and business payouts do not exist yet in any verified form &mdash; anyone publishing them today is guessing."
+        }
+      ]
+    },
+    {
+      "slug": "editions-and-price",
+      "title": "GTA 6 Price and Editions: Standard vs Ultimate",
+      "description": "GTA 6 costs $79.99 standard and $99.99 ultimate. Full breakdown of both editions, regional pricing, pre-order bonuses and the upgrade path.",
+      "verified": true,
+      "sections": [
+        {
+          "h": "The two editions",
+          "p": "Rockstar has confirmed two editions. The <strong>Standard Edition costs $79.99</strong> (&euro;75 / &pound;64) and the <strong>Ultimate Edition costs $99.99</strong> (&euro;94 / &pound;80). That is a $20 gap between them."
+        },
+        {
+          "h": "You can upgrade later",
+          "p": "If you buy Standard and change your mind, you can upgrade to Ultimate afterwards by paying the $20 difference. You are not locked out by buying the cheaper edition first, which makes Standard the lower-risk choice if you are undecided."
+        },
+        {
+          "h": "Pre-order bonuses",
+          "p": "Purchases made before November 20, 2026 include the <strong>Vintage Vice City Pack</strong>. Digital pre-orders also include <strong>one free month of GTA+</strong>, Rockstar's subscription service. Boxed pre-orders do not include the GTA+ month."
+        },
+        {
+          "h": "Worth noting",
+          "p": "The $79.99 standard price is above the $69.99 that has been typical for major console releases. Rockstar has not published a full contents breakdown of what separates the two editions beyond the pre-order items, so if the Ultimate extras matter to you, it is worth waiting for that detail before committing."
+        }
+      ]
+    },
+    {
+      "slug": "pc-version",
+      "title": "Is GTA 6 Coming to PC?",
+      "description": "GTA 6 has no announced PC release. What Rockstar has actually said, what the studio's history suggests, and why no date exists yet.",
+      "verified": true,
+      "sections": [
+        {
+          "h": "The short answer",
+          "p": "<strong>There is no announced PC version of GTA 6.</strong> Rockstar's own launch materials mention PlayStation 5 and Xbox Series X|S only. The company has not announced a PC release date, and has not confirmed that a PC version is in development."
+        },
+        {
+          "h": "What the studio's history suggests",
+          "p": "Rockstar has historically released PC versions of mainline Grand Theft Auto titles later than the console release, sometimes by a year or more. That pattern is a reasonable basis for expecting a PC version eventually &mdash; but a pattern is not an announcement, and we are not going to present it as one."
+        },
+        {
+          "h": "What this means if you only play on PC",
+          "p": "As things stand, there is no date to plan around. Anyone publishing a specific PC release date today is inventing it. If Rockstar announces one, this page gets updated."
+        }
+      ]
+    },
+    {
+      "slug": "online-multiplayer",
+      "title": "Does GTA 6 Have Online Multiplayer at Launch?",
+      "description": "Rockstar has not confirmed a GTA 6 online mode at launch. Exactly what has and has not been announced about multiplayer.",
+      "verified": true,
+      "sections": [
+        {
+          "h": "Nothing has been confirmed",
+          "p": "Rockstar has <strong>not announced a GTA 6 version of GTA Online</strong>. There is no roadmap for multiplayer modes and no timetable for when, or whether, that side of the series connects to the new world. This is one of the biggest open questions about the game."
+        },
+        {
+          "h": "The GTA+ detail that confuses people",
+          "p": "Digital pre-orders include a free month of <strong>GTA+</strong>, and GTA+ is the subscription tied to GTA Online. Some coverage has read this as evidence that GTA 6 Online exists at launch. It is not evidence &mdash; GTA+ already applies to the existing GTA Online in GTA V, which is the straightforward reading."
+        },
+        {
+          "h": "Why it matters",
+          "p": "In GTA V, the online mode is where the business and money systems live, and where most players spent most of their hours. Whether GTA 6 ships with an equivalent at launch, later, or in a different shape changes what the game is for a large part of the audience. We will update this page when Rockstar says something concrete, and not before."
+        }
+      ]
+    },
+    {
+      "slug": "setting-and-characters",
+      "title": "GTA 6 Setting and Characters: Leonida, Vice City, Jason and Lucia",
+      "description": "GTA 6 is set in the state of Leonida with Vice City at its centre, starring dual protagonists Jason Duval and Lucia Caminos.",
+      "verified": true,
+      "sections": [
+        {
+          "h": "The state of Leonida",
+          "p": "GTA 6 is set in the fictional <strong>state of Leonida</strong>, which Rockstar describes as home to the neon-soaked streets of Vice City and beyond. This is the first mainline entry to give the player a full state rather than a single city and its outskirts."
+        },
+        {
+          "h": "Two protagonists",
+          "p": "The game has dual protagonists: <strong>Jason Duval</strong> and <strong>Lucia Caminos</strong>. Lucia is the first female playable protagonist in a mainline Grand Theft Auto game."
+        },
+        {
+          "h": "Confirmed locations",
+          "p": "Rockstar has released official screenshots showing named locations including <strong>Mount Kalaga National Park</strong>, <strong>Port Gellhorn</strong>, <strong>Ambrosia</strong> and <strong>Grassrivers</strong>, alongside Vice City itself."
+        },
+        {
+          "h": "What is not confirmed",
+          "p": "The full map layout is not official. Every detailed GTA 6 map circulating online is fan reconstruction built from trailer analysis and leaked material, not a Rockstar release. The voice cast has also not been confirmed, despite widely repeated fan casting. We do not publish either as fact."
         }
       ]
     },
@@ -29,15 +121,19 @@
       "sections": [
         {
           "h": "What this is",
-          "p": "An independent, fan-made reference site. We publish vehicle databases, business calculators, and maps, and we label every data point as either confirmed or unconfirmed."
+          "p": "An independent, fan-made reference site for Grand Theft Auto VI. We publish databases, calculators and guides, and we label every data point as either confirmed or unconfirmed."
+        },
+        {
+          "h": "Our one rule",
+          "p": "We do not publish unverified data as fact. The game is not out. Any site showing you vehicle top speeds or business payouts today is making them up. When the game launches and real data exists, this site fills in fast &mdash; and every figure will say where it came from."
         },
         {
           "h": "Corrections",
-          "p": "If something here is wrong, tell us and we will fix it. Accuracy is the only reason anyone would come back."
+          "p": "If something here is wrong, tell us and we will fix it. Accuracy is the only reason anyone would come back to a site like this."
         },
         {
           "h": "Not official",
-          "p": "This site is not affiliated with Rockstar Games or Take-Two Interactive. All game trademarks are the property of their owners. We use them only to describe the game this site covers."
+          "p": "This site is not affiliated with, endorsed by, or sponsored by Rockstar Games or Take-Two Interactive. All game trademarks are the property of their owners. We use them only to describe the game this site covers."
         }
       ]
     }
