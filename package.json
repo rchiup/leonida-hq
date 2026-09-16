@@ -6,8 +6,5 @@
   "scripts": {
     "build": "node build.js",
     "serve": "node serve.js"
-  },
-  "dependencies": {
-    "playwright": "^1.63.0"
   }
 }
