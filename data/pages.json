@@ -136,6 +136,258 @@
           "p": "This site is not affiliated with, endorsed by, or sponsored by Rockstar Games or Take-Two Interactive. All game trademarks are the property of their owners. We use them only to describe the game this site covers."
         }
       ]
+    },
+    {
+      "slug": "file-size",
+      "title": "GTA 6 File Size: Rockstar Has Not Published One",
+      "description": "How many GB is GTA 6? Rockstar has not published an install size. What is official, where the circulating numbers come from, and what to plan for.",
+      "verified": true,
+      "sources": [
+        "https://www.gamesradar.com/games/grand-theft-auto/gta-6-gb-size/"
+      ],
+      "sections": [
+        {
+          "h": "The short answer",
+          "p": "<strong>Rockstar has not published a file size for GTA 6.</strong> As of late September 2026 there is no official GB figure for PS5 or Xbox Series X|S. Every number you see in a headline is an estimate made by someone outside Rockstar."
+        },
+        {
+          "h": "What is official",
+          "p": "Two things are confirmed that affect your storage. Pre-loading opens on <strong>November 12, 2026</strong>, a week before launch, so the download can finish before release day. And the boxed edition is a <strong>code in a box</strong>, not a disc with the game on it, so physical buyers download the whole game too (reported by GamesRadar+). See our <a href=\"/release-date/\">release date page</a> for pre-load details."
+        },
+        {
+          "h": "Where the numbers come from",
+          "p": "GamesRadar+ published an <em>estimate</em> of at least 120&ndash;130 GB, based on GTA V and Red Dead Redemption 2 sitting around 100&ndash;110 GB today. That is a guess from comparison, and they say so. Larger figures circulating on social media and aggregator sites have no Rockstar source behind them. None of these numbers are wrong to discuss; they are wrong to present as fact."
+        },
+        {
+          "h": "What is still unconfirmed",
+          "p": "The install size on each console, the size of a day-one patch, and whether the two platforms differ. When the figure appears on the PlayStation Store or Microsoft Store listing, or Rockstar publishes it, this page will carry it with the source. Until then, the honest answer is that the number does not exist publicly."
+        }
+      ]
+    },
+    {
+      "slug": "microtransactions",
+      "title": "Does GTA 6 Have Microtransactions?",
+      "description": "Rockstar says GTA 6 has no real-money purchases in its single-player game at launch. Who said it, where, and what the answer does not cover, including Online.",
+      "verified": true,
+      "sources": [
+        "https://www.gamespot.com/articles/grand-theft-auto-6-will-have-no-microtransactions-or-generative-ai/",
+        "https://www.gamesradar.com/games/grand-theft-auto/gta-6-exclusive-single-player-shops-and-side-missions-are-locked-to-the-usd100-ultimate-edition-and-fans-arent-happy-thats-a-huge-red-flag-for-me/"
+      ],
+      "sections": [
+        {
+          "h": "The short answer",
+          "p": "<strong>No, not in the single-player game at launch</strong>, according to Rockstar. You pay for the game once and it does not ask for more real money inside the story mode."
+        },
+        {
+          "h": "Who said it",
+          "p": "Rockstar North co-studio head <strong>Rob Nelson</strong> answered the question during a press visit to the studio in Edinburgh. The hosts of the Kinda Funny Gamecast reported his answer as &ldquo;no monetization&rdquo; when they asked about spending real money in the game. GameSpot reported it on <strong>August 27, 2026</strong>. Note that this is a verbal answer relayed by the press, not a written policy from Rockstar."
+        },
+        {
+          "h": "The $20 you might still spend",
+          "p": "No microtransactions does not mean everything is in the base game. Some single-player content is exclusive to the <strong>Ultimate Edition</strong>, including several in-game shops and side missions, as GamesRadar+ reported. You can move from Standard to Ultimate by paying the $20 difference. Our <a href=\"/editions-and-price/\">editions page</a> has the prices."
+        },
+        {
+          "h": "What the answer does not cover",
+          "p": "It covers the single-player game at launch. It says nothing about a future online mode, which Rockstar has not announced (see <a href=\"/online-multiplayer/\">online multiplayer</a>), or about paid expansions later. GTA Online for GTA V, which does sell in-game currency, keeps running. If Rockstar announces an online mode for GTA 6, its monetization is a separate question that is still unanswered."
+        }
+      ]
+    },
+    {
+      "slug": "radio-stations",
+      "title": "GTA 6 Radio Stations: None Confirmed Yet",
+      "description": "Rockstar has not named a single GTA 6 radio station. What it has said about in-game radio, how the album relates, and why station lists online are unofficial.",
+      "verified": true,
+      "sources": [
+        "https://www.gamespot.com/articles/gta-6-will-feature-the-next-evolution-of-in-game-radio-rockstar-says/",
+        "https://www.gamesradar.com/games/grand-theft-auto/you-cant-get-a-physical-copy-of-gta-6-but-you-can-get-the-soundtrack-on-cd-or-a-usd125-deluxe-vinyl-collection/"
+      ],
+      "sections": [
+        {
+          "h": "The short answer",
+          "p": "<strong>Rockstar has not confirmed any GTA 6 radio station</strong> by name, host or genre. Lists of stations you see online do not come from Rockstar."
+        },
+        {
+          "h": "What Rockstar actually said",
+          "p": "On <strong>September 17, 2026</strong>, at the end of its post announcing <a href=\"/soundtrack/\">GTA VI: The Album</a>, Rockstar teased the &ldquo;next evolution of in-game radio&rdquo; and asked fans to stay tuned for details about the game's music and its dynamic score (reported by GameSpot). That is the full extent of the official statement: radio exists and more details are coming."
+        },
+        {
+          "h": "The album is not the radio",
+          "p": "The 34-track album is original music made for the game. It is reasonable to expect those songs to be heard in-game, but Rockstar has not said which station plays what, or whether licensed classics sit alongside them the way they did in earlier games."
+        },
+        {
+          "h": "Reported, not confirmed",
+          "p": "Reports that specific celebrities will host stations have circulated for months; GameSpot describes them as rumors. We do not list station names drawn from leaked footage, and we do not treat background signage in trailers as proof that a station is playable. This page gets a full list once Rockstar publishes one."
+        }
+      ]
+    },
+    {
+      "slug": "mod-guidelines",
+      "title": "Rockstar's Mod Guidelines Explained Ahead of GTA 6",
+      "description": "Rockstar updated its mod guidelines in September 2026. What the rules ban, how mods can be monetized, and what they mean for GTA 6 given there is no PC version.",
+      "verified": true,
+      "sources": [
+        "https://www.rockstargames.com/community-resources/mod-guidelines",
+        "https://kotaku.com/rockstar-asks-fans-to-respect-their-games-as-it-updates-strict-modding-guidelines-2000736306",
+        "https://www.gamesradar.com/games/grand-theft-auto/ahead-of-gta-6-rockstar-releases-modding-guidelines-that-axe-new-missions-maps-ports-and-more-respect-our-games/"
+      ],
+      "sections": [
+        {
+          "h": "The short answer",
+          "p": "In <strong>September 2026</strong> Rockstar published updated mod guidelines on its official site. They apply to all Rockstar games and they are strict: no new story content set in Rockstar's continuity, no mixing of assets between Rockstar games, no ports, and no money made from mods outside Rockstar's own platform."
+        },
+        {
+          "h": "What the rules ban",
+          "p": "According to the published text, as quoted by Kotaku and GamesRadar+, mods must not expand or modify Rockstar's <strong>storylines, missions or characters</strong>; must not <strong>combine maps, characters or assets from one Rockstar game into another</strong>; and must not make a game run on <strong>platforms where Rockstar has not released it</strong>. They also bar third-party IP, reuse of Rockstar voice performances, and using a real person's voice or likeness without written permission."
+        },
+        {
+          "h": "Money and multiplayer",
+          "p": "Mods must be <strong>non-commercial</strong> unless monetized through Rockstar's official <strong>Creator Platform</strong>, which the guidelines name as the only licensed route. Multiplayer modding is likewise limited to that platform or to direct licences from Rockstar. The page also rules out real-money gambling, loot boxes and crypto schemes in mods."
+        },
+        {
+          "h": "What it means for GTA 6 right now",
+          "p": "Very little in practice, for now. GTA 6 launches on PS5 and Xbox Series X|S only, and <a href=\"/pc-version/\">no PC version has been announced</a>, so there is no way to mod it yet. The rules tell you what Rockstar will object to once a PC version exists. How strictly they will be enforced is something Rockstar has not said."
+        }
+      ]
+    },
+    {
+      "slug": "generative-ai",
+      "title": "Was Generative AI Used to Make GTA 6?",
+      "description": "Rockstar says GTA 6 was made without generative AI. Who said it and when, what the New York Times reported, and the limits of what that statement covers.",
+      "verified": true,
+      "sources": [
+        "https://www.gamespot.com/articles/grand-theft-auto-6-will-have-no-microtransactions-or-generative-ai/"
+      ],
+      "sections": [
+        {
+          "h": "The short answer",
+          "p": "<strong>No, according to Rockstar.</strong> The studio says generative AI was not used to make GTA 6."
+        },
+        {
+          "h": "Where it comes from",
+          "p": "During press visits to Rockstar North in August 2026, the Kinda Funny Gamecast hosts asked co-studio head <strong>Rob Nelson</strong> directly whether AI was in the game. They reported his answer as &ldquo;no AI.&rdquo; Separately, the <strong>New York Times</strong> feature published on <strong>August 27, 2026</strong> reported that Rockstar emphasized the game's human-made craft. GameSpot covered both the same day."
+        },
+        {
+          "h": "The detail that backs it up",
+          "p": "Per the same New York Times report, Rockstar said the game has <strong>over 600,000 animations</strong>, compared with 55,000 in GTA V and 300,000 in Red Dead Redemption 2. That is a Rockstar-provided figure, not an independent count."
+        },
+        {
+          "h": "What the statement does not cover",
+          "p": "It is a verbal answer relayed by journalists, not a written company policy. It refers to making the game, and does not address tools used after launch or any future online mode. If Rockstar publishes a formal position, this page will quote it."
+        }
+      ]
+    },
+    {
+      "slug": "frame-rate",
+      "title": "GTA 6 Frame Rate: 30fps on Console at Launch",
+      "description": "GTA 6 runs at 30fps on PS5 and Xbox Series X|S at launch. Who at Rockstar confirmed it, what was said about a performance mode, and what remains unknown.",
+      "verified": true,
+      "sources": [
+        "https://www.gamesradar.com/games/grand-theft-auto/gta-6-will-run-at-30fps-across-ps5-and-xbox-series-x-and-rockstar-is-reportedly-undecided-about-adding-a-performance-mode-to-better-that/"
+      ],
+      "sections": [
+        {
+          "h": "The short answer",
+          "p": "<strong>30 frames per second</strong> on PlayStation 5 and Xbox Series X|S at launch. A 60fps performance mode has <strong>not</strong> been announced."
+        },
+        {
+          "h": "What Rockstar said",
+          "p": "The Netflix Extended Look on <strong>August 27, 2026</strong> showed PS5 footage running at 30fps. Rockstar North co-studio head <strong>Rob Nelson</strong> then told Portuguese outlet Flow Games that the game runs at 30fps and that further options may be added in the future, as reported by GamesRadar+ on August 28."
+        },
+        {
+          "h": "Not a promise either way",
+          "p": "&ldquo;May be added in the future&rdquo; is not an announcement of a performance mode, and it is not a denial. Headlines claiming 60fps is coming, or that it is ruled out, go further than Rockstar did. Rockstar has also not said what, if anything, the PS5 Pro changes about frame rate."
+        },
+        {
+          "h": "What is still unknown",
+          "p": "Whether a performance mode arrives in a post-launch update, what the PS5 Pro version runs at, and the resolution targets on each console. For PC, there is <a href=\"/pc-version/\">no announced version</a> at all, so no PC frame-rate information exists."
+        }
+      ]
+    },
+    {
+      "slug": "map-size",
+      "title": "How Big Is the GTA 6 Map? What Rockstar Said",
+      "description": "GTA 6's map is about three times the size of Red Dead Redemption 2's, per Rockstar. What that figure means, where each comparison came from and what is unknown.",
+      "verified": true,
+      "sources": [
+        "https://www.gamesradar.com/games/grand-theft-auto/the-gta-6-map-is-3-times-bigger-than-red-dead-redemption-2s/",
+        "https://kotaku.com/gta-6s-vice-city-is-rockstars-biggest-yet-and-the-whole-map-is-three-times-larger-than-red-dead-redemption-2-2000728978"
+      ],
+      "sections": [
+        {
+          "h": "The short answer",
+          "p": "Rockstar says the map of Leonida is roughly <strong>three times the size of Red Dead Redemption 2's</strong>. It has not given a measurement in square miles or kilometres."
+        },
+        {
+          "h": "Where each comparison comes from",
+          "p": "The <strong>three-times-RDR2</strong> figure came from Rockstar in the New York Times feature published alongside the Netflix Extended Look on <strong>August 27, 2026</strong> (reported by GamesRadar+). Further comparisons &mdash; about <strong>twice the size of GTA V's map</strong>, and Vice City itself twice the size of Los Santos &mdash; were attributed to Rob Nelson but relayed second-hand by a YouTuber who attended a studio preview, as Kotaku noted. Treat those as reported, not as a published Rockstar figure."
+        },
+        {
+          "h": "Why there is no km² number",
+          "p": "A ratio is not a measurement. Any exact area you see online was calculated by someone outside Rockstar, often from fan-made maps built from trailers. We do not publish those as fact, and the full official map has not been released. See <a href=\"/setting-and-characters/\">setting and characters</a> for locations Rockstar has named."
+        },
+        {
+          "h": "Size is not length",
+          "p": "Rob Nelson has said his own playthrough of the main campaign took about 80 hours (GamesRadar+). That is one developer's run through the story, not an official completion time."
+        }
+      ]
+    },
+    {
+      "slug": "soundtrack",
+      "title": "GTA VI: The Album — Tracks, Date and Formats",
+      "description": "GTA VI: The Album has 34 original tracks from Atlantic Records and Rockstar, out November 19, 2026. Confirmed artists, formats, prices and what it is not.",
+      "verified": true,
+      "sources": [
+        "https://www.rockstargames.com/newswire/article/7599a881942544/announcing-grand-theft-auto-vi-the-album-coming-november-19",
+        "https://www.gamesradar.com/games/grand-theft-auto/you-cant-get-a-physical-copy-of-gta-6-but-you-can-get-the-soundtrack-on-cd-or-a-usd125-deluxe-vinyl-collection/",
+        "https://www.gamespot.com/articles/gta-6-will-feature-the-next-evolution-of-in-game-radio-rockstar-says/"
+      ],
+      "sections": [
+        {
+          "h": "The short answer",
+          "p": "<strong>Grand Theft Auto VI: The Album</strong> is a collection of <strong>34 original tracks</strong> made for the game, produced with <strong>Atlantic Records</strong>. Rockstar announced it on <strong>September 17, 2026</strong>, and the full album is set for <strong>November 19, 2026</strong>, the same day as the game."
+        },
+        {
+          "h": "Artists confirmed so far",
+          "p": "Six tracks were released on announcement day. Confirmed contributors include <strong>Travis Scott</strong>, <strong>Rauw Alejandro</strong>, <strong>Keith Richards</strong>, <strong>Morgan Wallen</strong>, and <strong>Yung Lean</strong>, whose track features Future and Metro Boomin. The rest of the tracklist has not been published."
+        },
+        {
+          "h": "Formats and prices",
+          "p": "Beyond streaming, the album is available to pre-order on CD (about <strong>$20</strong>), as a standard double vinyl (about <strong>$50</strong>, with retailer-specific colours) and as a <strong>$125</strong> limited-edition vinyl, per GamesRadar+. Those are US list prices at announcement; availability of the limited edition may change."
+        },
+        {
+          "h": "What the album is not",
+          "p": "It is not a list of radio stations. Rockstar has separately teased the &ldquo;next evolution of in-game radio&rdquo; without naming any station. See <a href=\"/radio-stations/\">GTA 6 radio stations</a> for what is and is not known."
+        }
+      ]
+    },
+    {
+      "slug": "leaks-rockstar-response",
+      "title": "GTA 6 Leaks: How Rockstar and Take-Two Responded",
+      "description": "What Rockstar and Take-Two officially did about the August 2026 GTA 6 leaks: the statement, the takedowns and the court subpoenas. No leaked material is shown.",
+      "verified": true,
+      "sources": [
+        "https://www.gamesradar.com/games/grand-theft-auto/rockstar-officially-responds-to-gta-6-leaks-this-is-obviously-not-how-we-intended-for-you-to-see-the-game-after-all-this-time/",
+        "https://www.gamesradar.com/games/grand-theft-auto/new-gta-6-leaks-show-gameplay-and-the-full-leonida-map-as-rockstar-issues-dmca-takedowns/",
+        "https://variety.com/2026/gaming/news/gta-6-leaks-rockstar-subpoenas-microsoft-discord-1236840176/"
+      ],
+      "sections": [
+        {
+          "h": "The short answer",
+          "p": "Starting in <strong>mid-August 2026</strong>, unreleased GTA 6 footage was posted online without Rockstar's permission. Rockstar and Take-Two responded with copyright takedowns, court subpoenas to identify those responsible, and a public statement on <strong>August 26</strong>. This page covers only that response. <strong>We do not show, describe or link to leaked material.</strong>"
+        },
+        {
+          "h": "Takedowns and subpoenas",
+          "p": "Accounts that reposted the footage received <strong>DMCA takedown notices</strong> within days, as GamesRadar+ reported on August 18. Take-Two then asked a US federal court for subpoenas requiring <strong>Microsoft and Discord</strong> to hand over information that could identify the people behind the leaks, according to Variety."
+        },
+        {
+          "h": "Rockstar's statement",
+          "p": "On <strong>August 26, 2026</strong>, the day before the Netflix Extended Look, Rockstar posted a statement on social media calling the leaks &ldquo;heartbreaking for our team&rdquo; and apologizing for how long the game has taken. It asked players to wait and experience the game themselves on November 19 (quoted by GamesRadar+)."
+        },
+        {
+          "h": "Why we do not cover the leaked content",
+          "p": "Leaked footage is unverified by definition, may show an old build, and is subject to active copyright claims. Nothing on this site is based on it, including as unconfirmed material. The first official gameplay was the Netflix Extended Look on August 27; everything we publish as fact traces back to Rockstar, Take-Two or a named major outlet."
+        }
+      ]
     }
   ]
 }
