@@ -28,6 +28,31 @@ const unverifiedNotice = `<div class="notice notice-warn">
 
 /* ---------- Home ---------- */
 {
+  // Tarjetas para cada pagina editorial indexable, generadas desde data/pages.json.
+  // Sin esto las paginas nuevas nacen huerfanas: nada las enlaza y Google no las descubre.
+  const yaEnTarjetas = new Set(["release-date"]);
+  const editoriales = pages
+    .filter((p) => p.verified === true && !yaEnTarjetas.has(p.slug))
+    .map(
+      (p) =>
+        `  <a class="card" href="/${esc(p.slug)}/"><h2>${esc(p.title)}</h2><p>${esc(p.description)}</p></a>`
+    )
+    .join("\n");
+
+  const seccionEditoriales = editoriales
+    ? `
+<section class="prose">
+  <h2>Answers, with sources</h2>
+  <p>Questions where the press is printing things its own sources do not say. Every page below
+  states who said what, and links the original.</p>
+</section>
+
+<section class="cards">
+${editoriales}
+</section>
+`
+    : "";
+
   const body = `
 <section class="hero">
   <h1>${esc(cfg.siteName)}</h1>
@@ -44,7 +69,7 @@ const unverifiedNotice = `<div class="notice notice-warn">
   <a class="card" href="/tools/business-calculator/"><h2>Profit calculator</h2><p>Work out ROI before you spend in-game money.</p></a>
   <a class="card" href="/release-date/"><h2>Release date</h2><p>What Rockstar has actually confirmed.</p></a>
 </section>
-
+${seccionEditoriales}
 <section class="prose">
   <h2>Why this site exists</h2>
   <p>Most game reference sites bury the number you came for under three paragraphs and five ads.
