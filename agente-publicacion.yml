@@ -1,0 +1,287 @@
+name: Agente de publicación (Groq)
+
+on:
+  # Corre dos veces por semana: lunes y jueves a las 22:00 UTC.
+  schedule:
+    - cron: '0 22 * * 1,4'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: agente-publicacion
+  cancel-in-progress: false
+
+jobs:
+  agente:
+    name: Investigar y proponer páginas (sin bash para el modelo)
+    permissions:
+      contents: read
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout del repositorio
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Configurar Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      # El modelo nunca ve el contenido completo de las páginas existentes,
+      # solo sus slugs — para no repetir temas y para no gastar el presupuesto
+      # de 6.000 tokens/minuto del nivel gratis de Groq.
+      - name: Preparar lista de slugs existentes
+        run: |
+          node -e '
+            const fs = require("fs");
+            const items = JSON.parse(fs.readFileSync("data/pages.json","utf8")).items;
+            fs.writeFileSync(process.env.RUNNER_TEMP + "/slugs.txt", items.map(p => p.slug).join("\n"));
+          '
+
+      # Paso 1: investigación con búsqueda web integrada de Groq (browser_search).
+      # El modelo solo devuelve texto — no tiene Bash, no toca archivos, no ve
+      # el repo más allá de lo que le pegamos en el prompt.
+      - name: Paso 1 — Investigar con Groq (browser_search)
+        env:
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+        run: |
+          set -o pipefail
+          PROMPT_BASE="$(cat agente/PROMPT-groq.md)"
+          SLUGS="$(cat "$RUNNER_TEMP/slugs.txt")"
+
+          USER_MSG=$(PB="$PROMPT_BASE" SL="$SLUGS" node -e '
+            const base = process.env.PB;
+            const slugs = process.env.SL;
+            const hoy = new Date().toISOString().slice(0,10);
+            const msg = base +
+              "\n\nFecha de hoy: " + hoy +
+              "\n\nSlugs ya publicados (no los repitas):\n" + slugs +
+              "\n\nHaz el Paso 1 ahora: investiga y escribe tus hallazgos en texto, con URLs completas.";
+            process.stdout.write(JSON.stringify(msg));
+          ')
+
+          curl -sS https://api.groq.com/openai/v1/chat/completions \
+            -H "Authorization: Bearer $GROQ_API_KEY" \
+            -H "Content-Type: application/json" \
+            -d '{
+              "model": "openai/gpt-oss-120b",
+              "tools": [{"type": "browser_search"}],
+              "messages": [{"role": "user", "content": '"$USER_MSG"'}]
+            }' > "$RUNNER_TEMP/groq-paso1-raw.json"
+
+          # Extrae solo el texto de la respuesta para pasarlo al paso 2.
+          node -e '
+            const fs = require("fs");
+            const r = JSON.parse(fs.readFileSync(process.env.RUNNER_TEMP + "/groq-paso1-raw.json","utf8"));
+            const texto = r.choices && r.choices[0] && r.choices[0].message && r.choices[0].message.content;
+            if (!texto) {
+              console.error("Groq no devolvió contenido en el paso 1. Respuesta cruda:");
+              console.error(JSON.stringify(r).slice(0, 1000));
+              process.exit(1);
+            }
+            fs.writeFileSync(process.env.RUNNER_TEMP + "/investigacion.txt", texto);
+          '
+          cp "$RUNNER_TEMP/investigacion.txt" "$RUNNER_TEMP/agente-log.txt"
+
+      # Paso 2: sin herramientas, se le pide convertir el texto del paso 1 en
+      # el JSON exacto que espera add-pages.js. Modo JSON forzado.
+      - name: Paso 2 — Estructurar en JSON (sin búsqueda)
+        env:
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+        run: |
+          set -o pipefail
+          SCHEMA="$(cat agente/JSON-SCHEMA-groq.md)"
+          INVESTIGACION="$(cat "$RUNNER_TEMP/investigacion.txt")"
+
+          USER_MSG=$(SCH="$SCHEMA" INV="$INVESTIGACION" node -e '
+            const schema = process.env.SCH;
+            const inv = process.env.INV;
+            process.stdout.write(JSON.stringify(schema + "\n" + inv));
+          ')
+
+          curl -sS https://api.groq.com/openai/v1/chat/completions \
+            -H "Authorization: Bearer $GROQ_API_KEY" \
+            -H "Content-Type: application/json" \
+            -d '{
+              "model": "openai/gpt-oss-120b",
+              "response_format": {"type": "json_object"},
+              "messages": [{"role": "user", "content": '"$USER_MSG"'}]
+            }' > "$RUNNER_TEMP/groq-paso2-raw.json"
+
+          node -e '
+            const fs = require("fs");
+            const r = JSON.parse(fs.readFileSync(process.env.RUNNER_TEMP + "/groq-paso2-raw.json","utf8"));
+            const texto = r.choices && r.choices[0] && r.choices[0].message && r.choices[0].message.content;
+            if (!texto) {
+              console.error("Groq no devolvió contenido en el paso 2. Respuesta cruda:");
+              console.error(JSON.stringify(r).slice(0, 1000));
+              process.exit(1);
+            }
+            fs.writeFileSync(process.env.RUNNER_TEMP + "/respuesta-cruda.json", texto);
+          '
+
+          {
+            echo "===== PASO 1: investigación ====="
+            cat "$RUNNER_TEMP/investigacion.txt"
+            echo
+            echo "===== PASO 2: JSON propuesto ====="
+            cat "$RUNNER_TEMP/respuesta-cruda.json"
+          } > "$RUNNER_TEMP/agente-log.txt"
+
+      # Limpia la respuesta, la normaliza, y le pone tope de 3 items.
+      - name: Procesar y validar la respuesta del modelo
+        run: |
+          node scripts/process-agent-output.js \
+            "$RUNNER_TEMP/respuesta-cruda.json" \
+            "$RUNNER_TEMP/agent-output.json"
+
+      # add-pages.js ya corre validateItem() de guard.js por cada item, y
+      # nunca pisa ni borra páginas existentes.
+      - name: Agregar páginas propuestas a data/pages.json
+        run: node scripts/add-pages.js "$RUNNER_TEMP/agent-output.json"
+
+      - name: Subir log del agente
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: agente-log
+          path: ${{ runner.temp }}/agente-log.txt
+          retention-days: 30
+          if-no-files-found: ignore
+
+      - name: Subir snapshot de data
+        uses: actions/upload-artifact@v4
+        with:
+          name: agente-data
+          path: data/
+          retention-days: 1
+          if-no-files-found: error
+
+  validar-y-publicar:
+    name: Validar y publicar en runner limpio
+    needs: agente
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+
+    steps:
+      - name: Checkout limpio del repositorio
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Configurar Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Configurar identidad de git
+        run: |
+          git config user.name "agente-leonida"
+          git config user.email "agente-leonida@users.noreply.github.com"
+
+      - name: Descargar data generada por el agente
+        uses: actions/download-artifact@v4
+        with:
+          name: agente-data
+          path: ${{ runner.temp }}/agente-data
+
+      - name: Validar y aplicar snapshot de data
+        shell: bash
+        run: |
+          INCOMING="$RUNNER_TEMP/agente-data"
+
+          BAD_PATHS="$(
+            find "$INCOMING" -mindepth 1 \
+              \( ! -type f -o ! -name '*.json' \) \
+              -print
+          )"
+
+          if [ -n "$BAD_PATHS" ]; then
+            echo "::error::El artifact contiene rutas no permitidas:"
+            printf '%s\n' "$BAD_PATHS"
+            exit 1
+          fi
+
+          if [ ! -f "$INCOMING/pages.json" ]; then
+            echo "::error::Falta data/pages.json en la salida del agente"
+            exit 1
+          fi
+
+          cp "$INCOMING"/*.json data/
+
+      - name: Freno 1 — Guard del agente
+        run: node scripts/guard.js --agent
+
+      - name: Freno 2 — Build
+        run: npm run build
+
+      - name: Freno 3 — Archivos críticos y sitemap
+        shell: bash
+        run: |
+          for file in \
+            public/googlebce07ec590b3fc8d.html \
+            public/google2f81ceee882d8fa6.html
+          do
+            if [ ! -f "$file" ]; then
+              echo "::error::Falta archivo crítico: $file"
+              exit 1
+            fi
+          done
+
+          if [ ! -f dist/sitemap.xml ]; then
+            echo "::error::Falta dist/sitemap.xml"
+            exit 1
+          fi
+
+          URL_COUNT="$(grep -o '<loc>' dist/sitemap.xml | wc -l || true)"
+          URL_COUNT="$(echo "$URL_COUNT" | tr -d '[:space:]')"
+
+          if [ "${URL_COUNT:-0}" -lt 15 ]; then
+            echo "::error::dist/sitemap.xml tiene solo ${URL_COUNT:-0} URLs; se requieren al menos 15"
+            exit 1
+          fi
+
+          echo "Sitemap OK: $URL_COUNT URLs"
+
+      - name: Commit y push de contenido
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          if git diff --quiet -- data/ && \
+             [ -z "$(git ls-files --others --exclude-standard -- data/)" ]; then
+            echo "No hay cambios nuevos ni modificados en data/. Corrida válida sin commit."
+            exit 0
+          fi
+
+          SLUGS="$(node -e '
+          const fs = require("fs");
+          const { execSync } = require("child_process");
+          let beforeItems = [];
+          try {
+            const raw = execSync(`git show ${process.env.GITHUB_SHA}:data/pages.json`, { encoding: "utf8" });
+            beforeItems = JSON.parse(raw).items || [];
+          } catch (_) {}
+          const before = new Map(beforeItems.map((p) => [p.slug, JSON.stringify(p)]));
+          const after = JSON.parse(fs.readFileSync("data/pages.json", "utf8")).items || [];
+          const touched = after.filter((p) => before.get(p.slug) !== JSON.stringify(p)).map((p) => p.slug);
+          process.stdout.write(touched.join(" ") || "update");
+          ')"
+
+          git add data/
+          git commit -m "content: $SLUGS"
+
+          git push \
+            "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" \
+            HEAD:main
