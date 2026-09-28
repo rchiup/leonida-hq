@@ -106,8 +106,12 @@ jobs:
       # presupuesto de tokens por minuto del nivel gratis de Groq. Sin esta
       # pausa, el Paso 2 puede chocar con el limite por unos segundos
       # (paso exactamente lo que ocurrio en la corrida #1, 26-09-2026).
+      # 20s no alcanzo en la practica (corridas #1 y #2, 26 y 28-09-2026):
+      # el Paso 1 por si solo consume casi todo el presupuesto de 8000
+      # tokens/minuto de Groq, y esa ventana es rodante — hay que esperar
+      # cerca de un minuto completo para que se libere espacio de verdad.
       - name: Pausa para no chocar con el limite de tokens por minuto
-        run: sleep 20
+        run: sleep 50
 
       # Paso 2: sin herramientas, se le pide convertir el texto del paso 1 en
       # el JSON exacto que espera add-pages.js. Modo JSON forzado.
