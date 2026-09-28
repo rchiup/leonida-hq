@@ -77,11 +77,20 @@ jobs:
               -d '{
                 "model": "openai/gpt-oss-120b",
                 "tools": [{"type": "browser_search"}],
+                "reasoning_effort": "low",
+                "temperature": 1,
+                "top_p": 1,
                 "messages": [{"role": "user", "content": '"$USER_MSG"'}]
               }' > "$RUNNER_TEMP/groq-paso1-raw.json"
 
-            if grep -q '"code":"rate_limit_exceeded"' "$RUNNER_TEMP/groq-paso1-raw.json" && [ "$ATTEMPT" -lt "$MAX_ATTEMPTS" ]; then
-              echo "Groq: limite de velocidad (paso 1), intento $ATTEMPT de $MAX_ATTEMPTS. Esperando 20s..."
+            # rate_limit_exceeded: el nivel gratis de Groq nos hizo esperar antes (corridas #1 y #2).
+            # output_parse_failed: falla propia del parser de tool-calls de Groq con gpt-oss-120b +
+            # browser_search (corrida #3, 28-09-2026) — el modelo genera un fragmento tipo
+            # "Open result 3 (...)" que el parser no logra interpretar. Es ruido de generacion,
+            # no un problema de nuestro prompt ni de los datos, asi que reintentar alcanza.
+            if grep -qE '"code":"(rate_limit_exceeded|output_parse_failed)"' "$RUNNER_TEMP/groq-paso1-raw.json" && [ "$ATTEMPT" -lt "$MAX_ATTEMPTS" ]; then
+              MOTIVO="$(grep -o '"code":"[a-z_]*"' "$RUNNER_TEMP/groq-paso1-raw.json" | head -1)"
+              echo "Groq: $MOTIVO (paso 1), intento $ATTEMPT de $MAX_ATTEMPTS. Esperando 20s..."
               sleep 20
               continue
             fi
@@ -142,8 +151,9 @@ jobs:
                 "messages": [{"role": "user", "content": '"$USER_MSG"'}]
               }' > "$RUNNER_TEMP/groq-paso2-raw.json"
 
-            if grep -q '"code":"rate_limit_exceeded"' "$RUNNER_TEMP/groq-paso2-raw.json" && [ "$ATTEMPT" -lt "$MAX_ATTEMPTS" ]; then
-              echo "Groq: limite de velocidad (paso 2), intento $ATTEMPT de $MAX_ATTEMPTS. Esperando 20s..."
+            if grep -qE '"code":"(rate_limit_exceeded|output_parse_failed)"' "$RUNNER_TEMP/groq-paso2-raw.json" && [ "$ATTEMPT" -lt "$MAX_ATTEMPTS" ]; then
+              MOTIVO="$(grep -o '"code":"[a-z_]*"' "$RUNNER_TEMP/groq-paso2-raw.json" | head -1)"
+              echo "Groq: $MOTIVO (paso 2), intento $ATTEMPT de $MAX_ATTEMPTS. Esperando 20s..."
               sleep 20
               continue
             fi
