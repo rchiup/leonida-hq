@@ -67,14 +67,26 @@ jobs:
             process.stdout.write(JSON.stringify(msg));
           ')
 
-          curl -sS https://api.groq.com/openai/v1/chat/completions \
-            -H "Authorization: Bearer $GROQ_API_KEY" \
-            -H "Content-Type: application/json" \
-            -d '{
-              "model": "openai/gpt-oss-120b",
-              "tools": [{"type": "browser_search"}],
-              "messages": [{"role": "user", "content": '"$USER_MSG"'}]
-            }' > "$RUNNER_TEMP/groq-paso1-raw.json"
+          ATTEMPT=0
+          MAX_ATTEMPTS=4
+          while :; do
+            ATTEMPT=$((ATTEMPT+1))
+            curl -sS https://api.groq.com/openai/v1/chat/completions \
+              -H "Authorization: Bearer $GROQ_API_KEY" \
+              -H "Content-Type: application/json" \
+              -d '{
+                "model": "openai/gpt-oss-120b",
+                "tools": [{"type": "browser_search"}],
+                "messages": [{"role": "user", "content": '"$USER_MSG"'}]
+              }' > "$RUNNER_TEMP/groq-paso1-raw.json"
+
+            if grep -q '"code":"rate_limit_exceeded"' "$RUNNER_TEMP/groq-paso1-raw.json" && [ "$ATTEMPT" -lt "$MAX_ATTEMPTS" ]; then
+              echo "Groq: limite de velocidad (paso 1), intento $ATTEMPT de $MAX_ATTEMPTS. Esperando 20s..."
+              sleep 20
+              continue
+            fi
+            break
+          done
 
           # Extrae solo el texto de la respuesta para pasarlo al paso 2.
           node -e '
@@ -89,6 +101,13 @@ jobs:
             fs.writeFileSync(process.env.RUNNER_TEMP + "/investigacion.txt", texto);
           '
           cp "$RUNNER_TEMP/investigacion.txt" "$RUNNER_TEMP/agente-log.txt"
+
+      # Pausa antes del Paso 2: la busqueda web del Paso 1 gasta casi todo el
+      # presupuesto de tokens por minuto del nivel gratis de Groq. Sin esta
+      # pausa, el Paso 2 puede chocar con el limite por unos segundos
+      # (paso exactamente lo que ocurrio en la corrida #1, 26-09-2026).
+      - name: Pausa para no chocar con el limite de tokens por minuto
+        run: sleep 20
 
       # Paso 2: sin herramientas, se le pide convertir el texto del paso 1 en
       # el JSON exacto que espera add-pages.js. Modo JSON forzado.
@@ -106,14 +125,26 @@ jobs:
             process.stdout.write(JSON.stringify(schema + "\n" + inv));
           ')
 
-          curl -sS https://api.groq.com/openai/v1/chat/completions \
-            -H "Authorization: Bearer $GROQ_API_KEY" \
-            -H "Content-Type: application/json" \
-            -d '{
-              "model": "openai/gpt-oss-120b",
-              "response_format": {"type": "json_object"},
-              "messages": [{"role": "user", "content": '"$USER_MSG"'}]
-            }' > "$RUNNER_TEMP/groq-paso2-raw.json"
+          ATTEMPT=0
+          MAX_ATTEMPTS=4
+          while :; do
+            ATTEMPT=$((ATTEMPT+1))
+            curl -sS https://api.groq.com/openai/v1/chat/completions \
+              -H "Authorization: Bearer $GROQ_API_KEY" \
+              -H "Content-Type: application/json" \
+              -d '{
+                "model": "openai/gpt-oss-120b",
+                "response_format": {"type": "json_object"},
+                "messages": [{"role": "user", "content": '"$USER_MSG"'}]
+              }' > "$RUNNER_TEMP/groq-paso2-raw.json"
+
+            if grep -q '"code":"rate_limit_exceeded"' "$RUNNER_TEMP/groq-paso2-raw.json" && [ "$ATTEMPT" -lt "$MAX_ATTEMPTS" ]; then
+              echo "Groq: limite de velocidad (paso 2), intento $ATTEMPT de $MAX_ATTEMPTS. Esperando 20s..."
+              sleep 20
+              continue
+            fi
+            break
+          done
 
           node -e '
             const fs = require("fs");
