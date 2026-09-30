@@ -212,6 +212,9 @@ ${p.sections.map((s, i) => `<section class="prose"><h2>${esc(s.h)}</h2><p>${s.p}
     description: p.description,
     path,
     body,
+    // Una pagina sin verificar (verified:false) sale con noindex y fuera del sitemap,
+    // igual que los vehiculos y negocios sin datos confirmados.
+    noindex: p.verified !== true,
     breadcrumbs: [{ name: "Home", path: "/" }, { name: p.title, path }],
     jsonLd: {
       "@context": "https://schema.org",
@@ -220,7 +223,7 @@ ${p.sections.map((s, i) => `<section class="prose"><h2>${esc(s.h)}</h2><p>${s.p}
       description: p.description,
       mainEntityOfPage: cfg.domain.replace(/\/$/, "") + path,
     },
-  }));
+  }), { indexable: p.verified === true });
 }
 
 /* ---------- Calculadora ---------- */
