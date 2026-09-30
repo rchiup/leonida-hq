@@ -497,6 +497,87 @@
           "p": "Multiplayer mode, game file size, frame‑rate options beyond the default 30 fps, radio stations, and a PC version have not been confirmed by any official source."
         }
       ]
+    },
+    {
+      "slug": "launch-date-vi",
+      "title": "Grand Theft Auto VI Launch Date",
+      "description": "Grand Theft Auto VI will launch on November 19, 2026, with pre-load available from November 12, 2026.",
+      "verified": false,
+      "sources": [
+        "https://www.rockstargames.com/newswire/article/ak3ak31a49a221/grand-theft-auto-vi-is-now-set-to-launch-november-19-2026"
+      ],
+      "sections": [
+        {
+          "h": "The short answer",
+          "p": "The game is set to launch on November 19, 2026, with pre-load starting November 12, 2026 for digital purchasers and pre-orders."
+        },
+        {
+          "h": "What Rockstar/Take-Two said",
+          "p": "Rockstar announced the release date and pre-load window in a newswire on June 25, 2026."
+        },
+        {
+          "h": "What others said",
+          "p": "No additional statements have been released by other outlets."
+        },
+        {
+          "h": "What is still unconfirmed",
+          "p": "No details beyond the release date and pre-load window have been confirmed."
+        }
+      ]
+    },
+    {
+      "slug": "radio-evolution-vi",
+      "title": "GTA VI In-Game Radio Evolution",
+      "description": "Rockstar confirmed a new evolution for GTA VI’s in-game radio on September 17, 2026, but no further details were provided.",
+      "verified": false,
+      "sources": [
+        "https://gtanews.fr/en/articles/gta-6-in-game-radio-next-evolution-dynamic-score/"
+      ],
+      "sections": [
+        {
+          "h": "The short answer",
+          "p": "Rockstar said the radio will have a new evolution, but specifics were not disclosed."
+        },
+        {
+          "h": "What Rockstar/Take-Two said",
+          "p": "The statement appeared in a Rockstar newswire on September 17, 2026."
+        },
+        {
+          "h": "What others said",
+          "p": "No additional details have emerged from other outlets."
+        },
+        {
+          "h": "What is still unconfirmed",
+          "p": "Names of stations, hosts, or new features remain unconfirmed."
+        }
+      ]
+    },
+    {
+      "slug": "language-support-vi",
+      "title": "GTA VI Language Support",
+      "description": "The game supports 13 languages, with full English dubbing; other languages offer subtitles and UI translations.",
+      "verified": false,
+      "sources": [
+        "https://gamemapa.com/en/gta-6/guides/gta-6-languages/"
+      ],
+      "sections": [
+        {
+          "h": "The short answer",
+          "p": "GTA VI supports 13 languages, including English, French, Italian, German, Russian, Japanese, Polish, Korean, Simplified Chinese, Traditional Chinese, Mexican Spanish, European Spanish, and Brazilian Portuguese."
+        },
+        {
+          "h": "What Rockstar/Take-Two said",
+          "p": "The official Rockstar store list confirms these 13 languages and notes that only English has full dubbing."
+        },
+        {
+          "h": "What others said",
+          "p": "No other source has changed this information."
+        },
+        {
+          "h": "What is still unconfirmed",
+          "p": "There are no confirmed updates or additions to the language list."
+        }
+      ]
     }
   ]
 }
