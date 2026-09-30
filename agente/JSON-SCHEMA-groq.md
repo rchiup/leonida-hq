@@ -5,7 +5,7 @@ después, con esta forma exacta:
   {
     "slug": "kebab-case-sin-gta",
     "title": "Title Case in English",
-    "description": "Entre 140 y 160 caracteres, en inglés.",
+    "description": "En inglés. Apunta a 150 caracteres (se acepta 140-170).",
     "verified": true,
     "sources": ["https://url-completa-y-real-1", "https://url-completa-y-real-2"],
     "sections": [
