@@ -88,7 +88,7 @@ jobs:
             # browser_search (corrida #3, 28-09-2026) — el modelo genera un fragmento tipo
             # "Open result 3 (...)" que el parser no logra interpretar. Es ruido de generacion,
             # no un problema de nuestro prompt ni de los datos, asi que reintentar alcanza.
-            if grep -qE '"code":"(rate_limit_exceeded|output_parse_failed)"' "$RUNNER_TEMP/groq-paso1-raw.json" && [ "$ATTEMPT" -lt "$MAX_ATTEMPTS" ]; then
+            if grep -qE '"code":"(rate_limit_exceeded|output_parse_failed|json_validate_failed)"' "$RUNNER_TEMP/groq-paso1-raw.json" && [ "$ATTEMPT" -lt "$MAX_ATTEMPTS" ]; then
               MOTIVO="$(grep -o '"code":"[a-z_]*"' "$RUNNER_TEMP/groq-paso1-raw.json" | head -1)"
               echo "Groq: $MOTIVO (paso 1), intento $ATTEMPT de $MAX_ATTEMPTS. Esperando 20s..."
               sleep 20
@@ -124,6 +124,15 @@ jobs:
 
       # Paso 2: sin herramientas, se le pide convertir el texto del paso 1 en
       # el JSON exacto que espera add-pages.js. Modo JSON forzado.
+      #
+      # reasoning_effort "low" + max_completion_tokens: gpt-oss-120b es un modelo
+      # de razonamiento y en Groq los tokens de razonamiento salen del MISMO
+      # presupuesto que el texto final. Sin "low" (que si estaba en el Paso 1),
+      # el modelo se gastaba la salida pensando y cortaba el JSON a la mitad; el
+      # modo JSON lo rechazaba entero con json_validate_failed ("max completion
+      # tokens reached before generating a valid document"). Eso boto la corrida
+      # #6 (28-09-2026). 6000 deja margen para 3 paginas sin pasarse del limite
+      # de 8000 tokens/minuto del nivel gratis.
       - name: Paso 2 — Estructurar en JSON (sin búsqueda)
         env:
           GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
@@ -148,10 +157,12 @@ jobs:
               -d '{
                 "model": "openai/gpt-oss-120b",
                 "response_format": {"type": "json_object"},
+                "reasoning_effort": "low",
+                "max_completion_tokens": 6000,
                 "messages": [{"role": "user", "content": '"$USER_MSG"'}]
               }' > "$RUNNER_TEMP/groq-paso2-raw.json"
 
-            if grep -qE '"code":"(rate_limit_exceeded|output_parse_failed)"' "$RUNNER_TEMP/groq-paso2-raw.json" && [ "$ATTEMPT" -lt "$MAX_ATTEMPTS" ]; then
+            if grep -qE '"code":"(rate_limit_exceeded|output_parse_failed|json_validate_failed)"' "$RUNNER_TEMP/groq-paso2-raw.json" && [ "$ATTEMPT" -lt "$MAX_ATTEMPTS" ]; then
               MOTIVO="$(grep -o '"code":"[a-z_]*"' "$RUNNER_TEMP/groq-paso2-raw.json" | head -1)"
               echo "Groq: $MOTIVO (paso 2), intento $ATTEMPT de $MAX_ATTEMPTS. Esperando 20s..."
               sleep 20
