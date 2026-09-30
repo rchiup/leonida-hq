@@ -11,6 +11,23 @@ import { readFileSync, writeFileSync } from "node:fs";
 
 const MAX_NEW_PAGES = 3; // debe calzar con AGENT_MAX_NEW_PAGES en scripts/guard.js
 
+/**
+ * Saca la marca del slug. El guard la prohibe (regla 3, por marcas registradas)
+ * y el modelo igual la mete de vez en cuando aunque el schema se lo pida.
+ * Quitarla es mecanico y no cambia el sentido, asi que se corrige en vez de
+ * botar la pagina: rechazar por sustancia, normalizar por formato.
+ */
+function limpiarSlug(slug) {
+  if (typeof slug !== "string") return { valor: slug, nota: null };
+  const limpio = slug
+    .toLowerCase()
+    .replace(/\b(gta|grand-theft-auto)-?(vi|6)?\b/g, "")
+    .replace(/-+/g, "-")
+    .replace(/^-|-$/g, "");
+  if (!limpio || limpio === slug) return { valor: slug, nota: null };
+  return { valor: limpio, nota: `slug "${slug}" -> "${limpio}" (se saco la marca)` };
+}
+
 const [inFile, outFile] = process.argv.slice(2);
 if (!inFile || !outFile) {
   console.error("Uso: node scripts/process-agent-output.js <entrada> <salida>");
@@ -77,6 +94,14 @@ if (items.length > MAX_NEW_PAGES) {
   );
   items = items.slice(0, MAX_NEW_PAGES);
 }
+
+// Normaliza el slug antes de entregar (ver limpiarSlug).
+items = items.map((it) => {
+  if (!it || typeof it !== "object") return it;
+  const { valor, nota } = limpiarSlug(it.slug);
+  if (nota) console.log(`  ${nota}`);
+  return valor === it.slug ? it : { ...it, slug: valor };
+});
 
 // Chequeo estructural minimo, no de contenido: eso es trabajo de guard.js.
 const conSlug = items.filter((it) => it && typeof it.slug === "string" && it.slug.length > 0);

@@ -68,7 +68,12 @@ export function validateItem(it) {
   // una pagina entera por 6 caracteres de mas es perder trabajo bueno por nada,
   // y recortar el texto a maquina deja frases cojas, que es peor que el corte
   // de Google. Se acepta el margen y el prompt pide apuntar a 150.
-  if (d.length < 140 || d.length > 170) errs.push(`description de ${d.length} caracteres (debe ser 140-170)`);
+  // Solo tope, sin minimo. Los modelos no saben contar caracteres: pedir un
+  // rango exacto convierte cada corrida en una loteria (166 en la #7, 135 en la
+  // #8). Una description corta no esta rota, solo es corta; una larga si se ve
+  // mal porque Google la corta. Se controla lo que importa y se suelta el resto.
+  if (d.length > 170) errs.push(`description de ${d.length} caracteres (maximo 170)`);
+  if (d.length < 50) errs.push(`description de ${d.length} caracteres: demasiado corta para servir de snippet`);
 
   if (typeof it.verified !== "boolean") errs.push("verified debe ser true o false");
 
