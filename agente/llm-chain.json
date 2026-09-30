@@ -1,0 +1,22 @@
+{
+  "_comentario": "Cadena de LLMs gratis. Se prueban en orden; si uno falla (cuota diaria, limite por minuto, error, JSON malo) se pasa al siguiente. Un proveedor sin API key en los secrets se salta solo. Un modelo que no existe (404) tambien se salta, asi que se pueden editar los nombres sin romper nada. search: browser_search (gpt-oss de Groq) | builtin (groq/compound, busca solo) | google (Gemini, google_search) | null.",
+  "research": [
+    { "provider": "groq", "model": "openai/gpt-oss-120b", "search": "browser_search", "reasoning": "low" },
+    { "provider": "groq", "model": "openai/gpt-oss-20b", "search": "browser_search", "reasoning": "low" },
+    { "provider": "groq", "model": "groq/compound", "search": "builtin" },
+    { "provider": "groq", "model": "groq/compound-mini", "search": "builtin" },
+    { "provider": "gemini", "model": "gemini-2.5-flash", "search": "google" },
+    { "provider": "gemini", "model": "gemini-2.5-flash-lite", "search": "google" }
+  ],
+  "structure": [
+    { "provider": "groq", "model": "openai/gpt-oss-120b", "reasoning": "low" },
+    { "provider": "groq", "model": "openai/gpt-oss-20b", "reasoning": "low" },
+    { "provider": "cerebras", "model": "gpt-oss-120b", "reasoning": "low" },
+    { "provider": "cerebras", "model": "llama-3.3-70b" },
+    { "provider": "gemini", "model": "gemini-2.5-flash" },
+    { "provider": "gemini", "model": "gemini-2.5-flash-lite" },
+    { "provider": "openrouter", "model": "openai/gpt-oss-120b:free", "json": false },
+    { "provider": "openrouter", "model": "meta-llama/llama-3.3-70b-instruct:free", "json": false },
+    { "provider": "groq", "model": "llama-3.3-70b-versatile" }
+  ]
+}
