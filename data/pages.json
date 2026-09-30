@@ -469,6 +469,34 @@
           "p": "No se ha revelado si el trailer será disponible en otras plataformas de streaming o si habrá versiones editadas para redes sociales."
         }
       ]
+    },
+    {
+      "slug": "release-details",
+      "title": "Grand Theft Auto VI Release Details",
+      "description": "Official release date, pre‑load, pre‑order dates, prices and editions for GTA VI, confirmed by Rockstar/Take‑Two press releases and the official website.",
+      "verified": true,
+      "sources": [
+        "https://ir.take2games.com/node/32311/pdf",
+        "https://www.rockstargames.com/VI/"
+      ],
+      "sections": [
+        {
+          "h": "The short answer",
+          "p": "GTA VI launches on 19 Nov 2026; pre‑load begins 12 Nov. Pre‑orders start 25 Jun 2026. Base price $79.99, Ultimate $99.99; digital pre‑orders include a month of GTA+ and a free Vintage Vice City Pack."
+        },
+        {
+          "h": "What Rockstar/Take-Two said",
+          "p": "In a June 24 2026 press release, Take‑Two announced the 19 Nov 2026 release, pre‑load on 12 Nov, pre‑orders from 25 Jun at midnight local time, pricing ($79.99 base, $99.99 Ultimate), and that the Vintage Vice City Pack is free on all pre‑orders placed before 20 Nov. The release will be on PS5 and Xbox Series X|S only."
+        },
+        {
+          "h": "What others said",
+          "p": "No external outlets have added new confirmed details beyond the official statements. Media reports simply echo the launch date, pricing and edition information provided by Rockstar/Take‑Two."
+        },
+        {
+          "h": "What is still unconfirmed",
+          "p": "Multiplayer mode, game file size, frame‑rate options beyond the default 30 fps, radio stations, and a PC version have not been confirmed by any official source."
+        }
+      ]
     }
   ]
 }
