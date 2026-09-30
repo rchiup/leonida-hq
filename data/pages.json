@@ -578,6 +578,34 @@
           "p": "There are no confirmed updates or additions to the language list."
         }
       ]
+    },
+    {
+      "slug": "ultimate-edition-details",
+      "title": "Ultimate Edition Details",
+      "description": "Explore the premium content and pricing of the Grand Theft Auto VI Ultimate Edition, announced on June 24, 2026.",
+      "verified": true,
+      "sources": [
+        "https://www.take2games.com",
+        "https://www.rockstargames.com"
+      ],
+      "sections": [
+        {
+          "h": "The short answer",
+          "p": "The GTA VI Ultimate Edition is priced at $99.99 and includes exclusive vehicles, weapons, apparel, and in-game actions tied to Jason and Lucia’s story."
+        },
+        {
+          "h": "What Rockstar/Take-Two said",
+          "p": "Take-Two confirmed the edition’s price and premium items in a June 24, 2026 press release, highlighting an exclusive collection of vehicles, weapons, and apparel."
+        },
+        {
+          "h": "What others said",
+          "p": "Media outlets have echoed Rockstar’s announcement, noting that the Ultimate Edition builds on the standard game with high-value collectibles."
+        },
+        {
+          "h": "What is still unconfirmed",
+          "p": "Full item list and specific differences from the standard edition have not been disclosed beyond the general categories of vehicles, weapons, and apparel."
+        }
+      ]
     }
   ]
 }
