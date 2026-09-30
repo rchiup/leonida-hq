@@ -3,10 +3,25 @@
 //   node scripts/add-pages.js nuevas.json
 //
 // El archivo puede ser un array de items o un objeto { "items": [...] }.
-// Si un slug ya existe, se salta (no se sobrescribe). Si un item no pasa la
-// validacion de guard.js, no se agrega nada y sale con codigo 1.
+// Si un slug ya existe, se salta (no se sobrescribe).
+//
+// CRITERIO DE EXITO — importa entenderlo:
+//
+// Que el guard rechace una pagina NO es una falla del sistema, es el guard
+// haciendo su pega. Antes, un solo item malo botaba los otros dos y marcaba la
+// corrida en rojo; eso confunde "el agente no trajo nada publicable hoy" (que
+// es normal y esperable) con "algo se rompio" (que hay que ir a mirar).
+//
+// Ahora:
+//   - se publican los items validos y se saltan los invalidos
+//   - una corrida donde no paso nada sale VERDE, con el detalle en el log
+//   - solo sale en rojo lo que de verdad esta roto: archivo ilegible, forma
+//     incorrecta, o que no se pueda escribir pages.json
+//
+// El detalle de lo rechazado se escribe igual en el resumen de la corrida, para
+// que se vea sin tener que abrir los logs aunque este verde.
 
-import { readFileSync, writeFileSync } from "node:fs";
+import { readFileSync, writeFileSync, appendFileSync } from "node:fs";
 import { validateItem } from "./guard.js";
 
 const file = process.argv[2];
@@ -26,23 +41,25 @@ const PAGES = "data/pages.json";
 const data = JSON.parse(readFileSync(PAGES, "utf8"));
 const existing = new Set(data.items.map((p) => p.slug));
 
-let bad = false;
+const rechazados = [];
+const validos = [];
+
 for (const it of incoming) {
   const errs = validateItem(it);
   if (errs.length) {
-    bad = true;
+    rechazados.push({ slug: it.slug || "(sin slug)", errs });
     console.error(`✗ ${it.slug || "(sin slug)"}\n    ${errs.join("\n    ")}`);
+  } else {
+    validos.push(it);
   }
-}
-if (bad) {
-  console.error("\nNo se agrego nada. Corrige los items y vuelve a correr.");
-  process.exit(1);
 }
 
 let added = 0;
-for (const it of incoming) {
+const saltados = [];
+for (const it of validos) {
   if (existing.has(it.slug)) {
     console.log(`= ${it.slug} ya existe, se salta`);
+    saltados.push(it.slug);
     continue;
   }
   data.items.push(it);
@@ -51,5 +68,38 @@ for (const it of incoming) {
   console.log(`+ ${it.slug}${it.verified ? "" : " (noindex)"}`);
 }
 
-writeFileSync(PAGES, JSON.stringify(data, null, 2) + "\n");
-console.log(`\n${added} agregadas, ${incoming.length - added} saltadas. Ahora: npm run build`);
+if (added > 0) writeFileSync(PAGES, JSON.stringify(data, null, 2) + "\n");
+
+console.log(
+  `\n${added} agregada(s), ${saltados.length} ya existian, ${rechazados.length} rechazada(s).`
+);
+
+if (added === 0) {
+  console.log(
+    "Nada que publicar en esta corrida. No es una falla: el guard filtro lo que " +
+      "no cumplia las reglas."
+  );
+}
+
+// Resumen visible en la pagina de la corrida, aunque salga verde.
+if (process.env.GITHUB_STEP_SUMMARY) {
+  const lineas = [`### Agente: ${added} pagina(s) publicada(s)`, ""];
+  for (const it of validos.filter((v) => !saltados.includes(v.slug))) {
+    lineas.push(`- ✅ \`${it.slug}\`${it.verified ? "" : " (noindex)"}`);
+  }
+  for (const s of saltados) lineas.push(`- ⏭️ \`${s}\` — ya existia`);
+  for (const r of rechazados) {
+    lineas.push(`- ❌ \`${r.slug}\``);
+    for (const e of r.errs) lineas.push(`  - ${e}`);
+  }
+  if (rechazados.length) {
+    lineas.push("", "> Un rechazo no es una falla del workflow. Si se repite el " +
+      "mismo motivo corrida tras corrida, ahi si hay algo que ajustar.");
+  }
+  try {
+    appendFileSync(process.env.GITHUB_STEP_SUMMARY, lineas.join("\n") + "\n");
+  } catch (_) {}
+}
+
+// Solo se sale en rojo por cosas realmente rotas, no por contenido rechazado.
+process.exit(0);
