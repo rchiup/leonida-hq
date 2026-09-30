@@ -48,7 +48,7 @@ jobs:
           node -e '
             const fs = require("fs");
             const items = JSON.parse(fs.readFileSync("data/pages.json","utf8")).items;
-            fs.writeFileSync(process.env.RUNNER_TEMP + "/slugs.txt", items.map(p => p.slug).join("\n"));
+            fs.writeFileSync(process.env.RUNNER_TEMP + "/slugs.txt", items.map(p => p.slug + " — " + p.title).join("\n"));
           '
 
       # Paso 1: investigación con búsqueda web integrada de Groq (browser_search).
@@ -69,7 +69,7 @@ jobs:
             const hoy = new Date().toISOString().slice(0,10);
             const msg = base +
               "\n\nFecha de hoy: " + hoy +
-              "\n\nSlugs ya publicados (no los repitas):\n" + slugs +
+              "\n\nPáginas ya publicadas (slug — título). No repitas estos temas ni propongas variantes:\n" + slugs +
               "\n\nHaz el Paso 1 ahora: investiga y escribe tus hallazgos en texto, con URLs completas.";
             process.stdout.write(JSON.stringify(msg));
           ')
