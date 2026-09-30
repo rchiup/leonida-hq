@@ -388,6 +388,87 @@
           "p": "Leaked footage is unverified by definition, may show an old build, and is subject to active copyright claims. Nothing on this site is based on it, including as unconfirmed material. The first official gameplay was the Netflix Extended Look on August 27; everything we publish as fact traces back to Rockstar, Take-Two or a named major outlet."
         }
       ]
+    },
+    {
+      "slug": "pre-loading",
+      "title": "Pre‑load Date for GTA VI",
+      "description": "Fecha oficial de pre‑carga del juego: 12 noviembre 2026, con disponibilidad tanto para versiones físicas como digitales, según nota de prensa de Take‑Two.",
+      "verified": true,
+      "sources": [
+        "https://taketwointeractivesoftwareinc.gcs-web.com/news-releases/news-release-details/rockstar-games-announces-pre-orders-grand-theft-auto-vi"
+      ],
+      "sections": [
+        {
+          "h": "The short answer",
+          "p": "La pre‑carga de GTA VI comenzará el 12 de noviembre 2026, justo antes del lanzamiento oficial."
+        },
+        {
+          "h": "What Rockstar/Take‑Two said",
+          "p": "Take‑Two confirmó en su comunicado del 24 jun 2026 que la pre‑carga abrirá a medianoche del 12 nov 2026 para todas las ediciones, físicas y digitales."
+        },
+        {
+          "h": "What others said",
+          "p": "No se han reportado discrepancias; medios como PC Gamer repiten la información sin añadir detalles adicionales."
+        },
+        {
+          "h": "What is still unconfirmed",
+          "p": "No se ha especificado la hora exacta de disponibilidad por zona horaria ni los requisitos de almacenamiento del juego."
+        }
+      ]
+    },
+    {
+      "slug": "pre-order-bonuses",
+      "title": "Pre‑order Bonuses and Editions for GTA VI",
+      "description": "Detalles verificables de los paquetes de pre‑pedido, precios y bonificaciones, incluyendo el mes gratuito de GTA+ y el Vintage Vice City Pack.",
+      "verified": true,
+      "sources": [
+        "https://taketwointeractivesoftwareinc.gcs-web.com/news-releases/news-release-details/rockstar-games-announces-pre-orders-grand-theft-auto-vi"
+      ],
+      "sections": [
+        {
+          "h": "The short answer",
+          "p": "Los pre‑pedidos empiezan el 25 jun 2026; hay ediciones Standard ($79.99) y Ultimate ($99.99) con Vintage Vice City Pack y un mes gratis de GTA+ para pedidos antes del 20 nov 2026."
+        },
+        {
+          "h": "What Rockstar/Take‑Two said",
+          "p": "Take‑Two indicó precios, fechas de inicio y los contenidos de cada edición, resaltando que el Vintage Vice City Pack está incluido en todos los pre‑pedidos realizados antes del 20 nov 2026."
+        },
+        {
+          "h": "What others said",
+          "p": "Diversos sitios de noticias repiten la información, destacando el valor añadido del mes de GTA+ y la falta de menciones a PC o GTA Online."
+        },
+        {
+          "h": "What is still unconfirmed",
+          "p": "No se ha divulgado el contenido exacto de la Ultimate Edition más allá del pack y el mes de GTA+, ni los posibles futuros paquetes adicionales."
+        }
+      ]
+    },
+    {
+      "slug": "extended-look-trailer",
+      "title": "Extended Look Trailer Release for GTA VI",
+      "description": "Información oficial sobre el estreno del trailer “Extended Look” del 27 agosto 2026, su duración y plataformas de difusión.",
+      "verified": true,
+      "sources": [
+        "https://www.pcgamer.com/news/live/grand-theft-auto-6-reveal-live-coverage-breaking-down-the-netflix-extended-look-event/"
+      ],
+      "sections": [
+        {
+          "h": "The short answer",
+          "p": "El trailer oficial de 26 minutos se emitió el 27 agosto 2026 en Netflix a las 12 pm PDT y se subió a YouTube seis horas después."
+        },
+        {
+          "h": "What Rockstar/Take‑Two said",
+          "p": "Rockstar anunció el evento como un “Extended Look” transmitido por Netflix, sin mencionar planes para GTA Online o versiones PC."
+        },
+        {
+          "h": "What others said",
+          "p": "PC Gamer cubrió el evento, confirmando la duración, la plataforma y la ausencia de cualquier anuncio de contenido multijugador."
+        },
+        {
+          "h": "What is still unconfirmed",
+          "p": "No se ha revelado si el trailer será disponible en otras plataformas de streaming o si habrá versiones editadas para redes sociales."
+        }
+      ]
     }
   ]
 }
