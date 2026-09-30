@@ -338,6 +338,29 @@ jobs:
           git add data/
           git commit -m "content: $SLUGS"
 
-          git push \
-            "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" \
-            HEAD:main
+          REMOTE="https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+
+          # main puede haber avanzado mientras corria el agente: se rebasa sobre
+          # lo ultimo y se reintenta. Solo cambia data/, asi que no deberia haber conflictos.
+          for intento in 1 2 3 4 5; do
+            git fetch "$REMOTE" main
+            if ! git rebase FETCH_HEAD; then
+              git rebase --abort || true
+              echo "::error::Conflicto al rebasar sobre main. Corre el workflow de nuevo."
+              exit 1
+            fi
+
+            # Revalida sobre el main actualizado antes de publicar
+            node scripts/guard.js --agent
+            npm run build
+
+            if git push "$REMOTE" HEAD:main; then
+              echo "Push OK (intento $intento)"
+              exit 0
+            fi
+            echo "Push rechazado (intento $intento), reintentando..."
+            sleep $((intento * 3))
+          done
+
+          echo "::error::No se pudo hacer push tras 5 intentos"
+          exit 1
