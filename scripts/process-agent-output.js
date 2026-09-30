@@ -8,6 +8,7 @@
 // Sale con codigo 1 y un mensaje legible si la respuesta no se puede rescatar.
 
 import { readFileSync, writeFileSync } from "node:fs";
+import { isAllowedSource, isConcreteSource, isCastTopic } from "./guard.js";
 
 const MAX_NEW_PAGES = 3; // debe calzar con AGENT_MAX_NEW_PAGES en scripts/guard.js
 
@@ -101,6 +102,22 @@ items = items.map((it) => {
   const { valor, nota } = limpiarSlug(it.slug);
   if (nota) console.log(`  ${nota}`);
   return valor === it.slug ? it : { ...it, slug: valor };
+});
+
+// verified:true es una afirmacion de fondo: se sostiene con una fuente admitida
+// y concreta, y nunca en temas de elenco. Si no se sostiene, se baja a
+// verified:false (la pagina queda noindex) en vez de botarla: el modelo
+// exagera la etiqueta, pero el contenido sigue siendo honesto.
+items = items.map((it) => {
+  if (!it || typeof it !== "object" || it.verified !== true) return it;
+  const fuentes = Array.isArray(it.sources) ? it.sources : [];
+  let motivo = null;
+  if (isCastTopic(it)) motivo = "tema de elenco";
+  else if (fuentes.length === 0 || !fuentes.every(isAllowedSource)) motivo = "fuente fuera de la lista admitida";
+  else if (!fuentes.some(isConcreteSource)) motivo = "las fuentes son solo portadas de sitios";
+  if (!motivo) return it;
+  console.log(`  ${it.slug}: verified true -> false (${motivo})`);
+  return { ...it, verified: false };
 });
 
 // Chequeo estructural minimo, no de contenido: eso es trabajo de guard.js.

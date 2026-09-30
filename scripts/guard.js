@@ -92,6 +92,28 @@ export const isAllowedSource = (src) => {
   return ALLOWED_SOURCES.some((d) => host === d || host.endsWith("." + d));
 };
 
+/**
+ * true si la URL apunta a algo concreto (un articulo, un comunicado, una
+ * pagina del juego), no a la portada de un sitio. "https://www.take2games.com"
+ * o "https://www.rockstargames.com/" no respaldan ninguna afirmacion puntual.
+ */
+export function isConcreteSource(src) {
+  const rest = String(src).replace(/^https?:\/\//i, "").replace(/[?#].*$/, "");
+  const i = rest.indexOf("/");
+  if (i === -1) return false;
+  return rest.slice(i).replace(/\/+$/, "").length > 0;
+}
+
+/**
+ * Temas de elenco (actores, voces, casting): casi toda la informacion que hay
+ * sobre esto sale de filtraciones o de segunda mano (regla 4 del prompt), asi
+ * que nunca pueden ir como verificados. Solo se mira slug, titulo y
+ * description para no saltarse paginas que mencionan a un actor de pasada.
+ */
+export const CAST_RE = /\b(cast|casting|actor|actors|actress|actresses|voice[ -]?actor|voice[ -]?actors|voiced by|voice cast|stars as)\b/i;
+export const isCastTopic = (it) =>
+  CAST_RE.test(`${String(it.slug || "").replace(/-/g, " ")} ${it.title || ""} ${it.description || ""}`);
+
 /** Devuelve la lista de problemas de un item de pages.json (vacia = ok). */
 export function validateItem(it) {
   const errs = [];
@@ -130,6 +152,10 @@ export function validateItem(it) {
     for (const s of sources) {
       if (!isAllowedSource(s)) errs.push(`fuente no admitida para verified:true: ${s}`);
     }
+    if (sources.length > 0 && !sources.some(isConcreteSource)) {
+      errs.push("verified:true con fuentes que son solo la portada de un sitio: hace falta al menos una URL concreta (articulo o comunicado)");
+    }
+    if (isCastTopic(it)) errs.push("tema de elenco (cast/actores/voces): no puede ir como verified:true");
   }
 
   const prose = [it.title, it.description, ...(Array.isArray(it.sections) ? it.sections.flatMap((s) => [s.h, s.p]) : [])]
@@ -203,4 +229,4 @@ function main() {
   console.log(`GUARD: ok (${pages.length} paginas${agent ? ", modo agente" : ""})`);
 }
 
-if (import.meta.url === pathToFileURL(process.argv[1]).href) main();
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) main();
