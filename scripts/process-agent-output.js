@@ -24,9 +24,28 @@ function limpiarSlug(slug) {
     .toLowerCase()
     .replace(/\b(gta|grand-theft-auto)-?(vi|6)?\b/g, "")
     .replace(/-+/g, "-")
-    .replace(/^-|-$/g, "");
+    .replace(/^-|-$/g, "")
+    // Quitar la marca suele dejar un "vi" suelto en las puntas (launch-date-vi).
+    .replace(/^vi(-|$)/, "")
+    .replace(/-(vi|6)$/, "");
   if (!limpio || limpio === slug) return { valor: slug, nota: null };
   return { valor: limpio, nota: `slug "${slug}" -> "${limpio}" (se saco la marca)` };
+}
+
+/**
+ * Los modelos chicos no saben contar caracteres y se pasan del tope de 170
+ * (el 20b mando 205). Es un problema de forma, no de fondo: se recorta en el
+ * ultimo fin de oracion que quepa; si no hay uno razonable, en la ultima
+ * palabra entera con "…". Nunca a mitad de palabra.
+ */
+export function recortarDescripcion(d, max = 170) {
+  if (typeof d !== "string" || d.length <= max) return d;
+  const tramo = d.slice(0, max);
+  let fin = -1;
+  for (const m of tramo.matchAll(/[.!?](?=\s|$)/g)) fin = m.index;
+  if (fin >= 100) return tramo.slice(0, fin + 1).trim();
+  const palabra = tramo.slice(0, max - 1).replace(/\s+\S*$/, "").replace(/[\s,;:\-–—(]+$/, "");
+  return palabra + "…";
 }
 
 const [inFile, outFile] = process.argv.slice(2);
@@ -102,6 +121,14 @@ items = items.map((it) => {
   const { valor, nota } = limpiarSlug(it.slug);
   if (nota) console.log(`  ${nota}`);
   return valor === it.slug ? it : { ...it, slug: valor };
+});
+
+// Descripcion demasiado larga: se recorta (forma), ver recortarDescripcion.
+items = items.map((it) => {
+  if (!it || typeof it.description !== "string" || it.description.length <= 170) return it;
+  const nueva = recortarDescripcion(it.description);
+  console.log(`  ${it.slug}: description ${it.description.length} -> ${nueva.length} caracteres (se recorto)`);
+  return { ...it, description: nueva };
 });
 
 // verified:true es una afirmacion de fondo: se sostiene con una fuente admitida
