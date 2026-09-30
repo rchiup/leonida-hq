@@ -5,6 +5,12 @@ on:
   schedule:
     - cron: '0 22 * * 1,4'
   workflow_dispatch:
+    inputs:
+      modelo:
+        description: 'Modelo de Groq (cada modelo tiene su propia cuota diaria)'
+        required: false
+        default: 'openai/gpt-oss-120b'
+        type: string
 
 permissions:
   contents: read
@@ -51,6 +57,7 @@ jobs:
       - name: Paso 1 — Investigar con Groq (browser_search)
         env:
           GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          MODEL: ${{ inputs.modelo || 'openai/gpt-oss-120b' }}
         run: |
           set -o pipefail
           PROMPT_BASE="$(cat agente/PROMPT-groq.md)"
@@ -75,7 +82,7 @@ jobs:
               -H "Authorization: Bearer $GROQ_API_KEY" \
               -H "Content-Type: application/json" \
               -d '{
-                "model": "openai/gpt-oss-120b",
+                "model": "'"$MODEL"'",
                 "tools": [{"type": "browser_search"}],
                 "reasoning_effort": "low",
                 "temperature": 1,
@@ -136,6 +143,7 @@ jobs:
       - name: Paso 2 — Estructurar en JSON (sin búsqueda)
         env:
           GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          MODEL: ${{ inputs.modelo || 'openai/gpt-oss-120b' }}
         run: |
           set -o pipefail
           SCHEMA="$(cat agente/JSON-SCHEMA-groq.md)"
@@ -155,7 +163,7 @@ jobs:
               -H "Authorization: Bearer $GROQ_API_KEY" \
               -H "Content-Type: application/json" \
               -d '{
-                "model": "openai/gpt-oss-120b",
+                "model": "'"$MODEL"'",
                 "response_format": {"type": "json_object"},
                 "reasoning_effort": "low",
                 "max_completion_tokens": 6000,
