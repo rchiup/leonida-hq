@@ -7,7 +7,7 @@
 //
 // Sale con codigo 1 y un mensaje legible si la respuesta no se puede rescatar.
 
-import { readFileSync, writeFileSync } from "node:fs";
+import { readFileSync, writeFileSync, appendFileSync } from "node:fs";
 import { isAllowedSource, isConcreteSource, isCastTopic } from "./guard.js";
 
 const MAX_NEW_PAGES = 3; // debe calzar con AGENT_MAX_NEW_PAGES en scripts/guard.js
@@ -46,6 +46,46 @@ export function recortarDescripcion(d, max = 170) {
   if (fin >= 100) return tramo.slice(0, fin + 1).trim();
   const palabra = tramo.slice(0, max - 1).replace(/\s+\S*$/, "").replace(/[\s,;:\-–—(]+$/, "");
   return palabra + "…";
+}
+
+/**
+ * Temas ya cubiertos. Cada grupo es una pregunta que una pagina responde; si ya
+ * existe una pagina del grupo, otra del mismo grupo compite con ella en Google
+ * (canibaliza) y es contenido repetido, justo lo que el spam update castiga.
+ * Medir el solapamiento de palabras no separa duplicados de temas legitimos
+ * (corridas #9-#17), y los modelos chicos ignoran la lista del prompt, asi que
+ * el filtro es determinista: por palabras clave del slug y el titulo.
+ */
+export const TEMAS = [
+  ["fecha de lanzamiento / pre-carga", /release date|launch date|pre ?load|release details/],
+  ["pre-orden, ediciones y precio", /pre ?order|edition|pric(e|es|ing)|bonus|\bcost\b/],
+  ["version de PC", /\bpc\b|steam|epic games/],
+  ["modo online", /online|multiplayer/],
+  ["tamano de archivo", /file size|install size|storage|\bgb\b/],
+  ["microtransacciones", /microtransaction|shark ?card|monetization/],
+  ["emisoras de radio", /radio|station/],
+  ["mods", /\bmods?\b|modding/],
+  ["IA generativa", /generative|\bai\b/],
+  ["fps / rendimiento", /frame ?rate|\bfps\b|performance mode/],
+  ["tamano del mapa", /map size|\bmap\b|square kilomet/],
+  ["banda sonora", /soundtrack|album|tracklist/],
+  ["filtraciones", /leak/],
+  ["trailer", /trailer/],
+  ["idiomas", /language|dubbing|subtitles/],
+  ["elenco", /\bcast\b|casting|\bactors?\b|voice/],
+  ["ambientacion y personajes", /setting|characters?\b|jason|lucia|protagonist/],
+];
+const textoTema = (it) => `${it.slug || ""} ${it.title || ""}`.toLowerCase().replace(/[-\u2010-\u2015_]+/g, " ");
+
+/** Devuelve { tema, slug } si ya hay una pagina que cubre el tema de `it`; si no, null. */
+export function temaCubierto(it, existentes) {
+  const t = textoTema(it);
+  for (const [tema, re] of TEMAS) {
+    if (!re.test(t)) continue;
+    const otra = existentes.find((p) => p.slug !== it.slug && re.test(textoTema(p)));
+    if (otra) return { tema, slug: otra.slug };
+  }
+  return null;
 }
 
 const [inFile, outFile] = process.argv.slice(2);
@@ -122,6 +162,37 @@ items = items.map((it) => {
   if (nota) console.log(`  ${nota}`);
   return valor === it.slug ? it : { ...it, slug: valor };
 });
+
+// Tema repetido: se descarta (fondo), ver TEMAS. Las paginas existentes se leen de data/pages.json.
+{
+  let existentes = [];
+  try {
+    existentes = JSON.parse(readFileSync("data/pages.json", "utf8")).items || [];
+  } catch {}
+  const aceptados = [];
+  const avisos = [];
+  for (const it of items) {
+    const dup = it && typeof it === "object" ? temaCubierto(it, [...existentes, ...aceptados]) : null;
+    if (dup) {
+      const msg = `${it.slug}: tema ya cubierto (${dup.tema}) por "${dup.slug}", se descarta`;
+      console.log("  " + msg);
+      avisos.push(`⏭️ ${msg}`);
+    } else {
+      aceptados.push(it);
+    }
+  }
+  if (avisos.length && process.env.GITHUB_STEP_SUMMARY) {
+    try {
+      appendFileSync(process.env.GITHUB_STEP_SUMMARY, "### Temas repetidos descartados\n" + avisos.join("\n") + "\n");
+    } catch {}
+  }
+  items = aceptados;
+  if (items.length === 0) {
+    writeFileSync(outFile, JSON.stringify({ items: [] }, null, 2) + "\n");
+    console.log("Todos los items repetian temas ya publicados. Corrida vacia, resultado valido.");
+    process.exit(0);
+  }
+}
 
 // Descripcion demasiado larga: se recorta (forma), ver recortarDescripcion.
 items = items.map((it) => {
