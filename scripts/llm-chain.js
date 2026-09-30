@@ -183,7 +183,8 @@ export async function runPhase(phase, candidates, text, ctx) {
       }
       if (r.cls === "rate") {
         const w = r.waitMs ?? 20000;
-        if (w > 90000 || n === 3) break;
+        // Gemini responde 429 "exceeded your current quota" tanto por minuto como cuando el plan gratis no incluye la funcion (p.ej. busqueda con Google): un solo reintento alcanza.
+        if (w > 90000 || n >= (cand.provider === "gemini" ? 2 : 3)) break;
         await sleep(w + 1500);
         continue;
       }
