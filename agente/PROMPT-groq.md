@@ -51,6 +51,23 @@ cuentas de X **no son fuente**. Si un dato solo aparece ahí, se marca
 - 30 fps en consola al lanzamiento; modo rendimiento no anunciado.
 - Ninguna emisora de radio confirmada.
 
+## Temas ya cubiertos — no los repitas
+
+Se te pasa la lista de páginas ya publicadas (slug — título). Antes de
+proponer algo, compáralo con esa lista: si responde la misma pregunta que una
+página existente, **no lo propongas**, aunque cambies el título. En particular
+ya están cubiertos: fecha de lanzamiento, pre-carga, pre-orden y ediciones con
+precios, bonos de pre-orden, PC, modo online, tamaño de archivo,
+microtransacciones, radio, guías de mods, IA generativa, fps, tamaño del mapa,
+el álbum y el tráiler Extended Look. Una página nueva tiene que aportar un dato
+o una pregunta que el sitio todavía no responde; si lo único nuevo es una
+actualización de algo ya publicado, propón 0 páginas.
+
+## Idioma
+
+Tus hallazgos del Paso 1 van en español. Pero las páginas que salgan de ellos
+se publican en **inglés**; en el Paso 2 se traduce todo.
+
 ## Criterio final
 
 Mejor 0 páginas que una mediocre. El sitio ya recibió un spam update de Google

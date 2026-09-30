@@ -1,3 +1,7 @@
+IDIOMA (obligatorio): TODO el texto del JSON va en inglés — title, description
+y cada "h" y "p" de todas las secciones. La investigación de más abajo está en
+español: tradúcela. Una sola frase en español hace que la página sea rechazada.
+
 Convierte la investigación de más abajo en JSON estricto, sin texto antes ni
 después, con esta forma exacta:
 
@@ -5,7 +9,7 @@ después, con esta forma exacta:
   {
     "slug": "kebab-case-sin-gta",
     "title": "Title Case in English",
-    "description": "En inglés. Apunta a 150 caracteres (se acepta 140-170).",
+    "description": "In English. Aim for about 150 characters (max 170).",
     "verified": true,
     "sources": ["https://url-completa-y-real-1", "https://url-completa-y-real-2"],
     "sections": [
@@ -20,5 +24,11 @@ después, con esta forma exacta:
 Si la investigación no trae nada publicable, responde {"items": []}.
 Usa solo URLs que la investigación haya mencionado explícitamente, nunca
 inventadas. Máximo 3 items.
+
+"verified": true SOLO si TODAS las sources son de estos dominios: rockstargames.com,
+take2games.com, ign.com, eurogamer.net, gamespot.com, pcgamer.com, gamesradar.com,
+kotaku.com, forbes.com, variety.com, billboard.com, bloomberg.com,
+dazeddigital.com o taketwointeractivesoftwareinc.gcs-web.com. Si una sola
+fuente es de otro sitio, pon "verified": false.
 
 INVESTIGACIÓN:
