@@ -7,9 +7,9 @@ on:
   workflow_dispatch:
     inputs:
       modelo:
-        description: 'Modelo de Groq (cada modelo tiene su propia cuota diaria)'
+        description: 'Modelo a probar primero (vacio = el orden de agente/llm-chain.json). Si falla, sigue la cadena.'
         required: false
-        default: 'openai/gpt-oss-120b'
+        default: ''
         type: string
 
 permissions:
@@ -40,167 +40,28 @@ jobs:
         with:
           node-version: 22
 
-      # El modelo nunca ve el contenido completo de las páginas existentes,
-      # solo sus slugs — para no repetir temas y para no gastar el presupuesto
-      # de 6.000 tokens/minuto del nivel gratis de Groq.
-      - name: Preparar lista de slugs existentes
-        run: |
-          node -e '
-            const fs = require("fs");
-            const items = JSON.parse(fs.readFileSync("data/pages.json","utf8")).items;
-            fs.writeFileSync(process.env.RUNNER_TEMP + "/slugs.txt", items.map(p => p.slug + " — " + p.title).join("\n"));
-          '
-
-      # Paso 1: investigación con búsqueda web integrada de Groq (browser_search).
-      # El modelo solo devuelve texto — no tiene Bash, no toca archivos, no ve
-      # el repo más allá de lo que le pegamos en el prompt.
-      - name: Paso 1 — Investigar con Groq (browser_search)
+      # Pasos 1 (investigar con busqueda web) y 2 (estructurar en JSON) con una
+      # cadena de LLMs gratis: si un modelo se queda sin cuota o falla, se pasa
+      # al siguiente (otro modelo de Groq, compound, Gemini, Cerebras,
+      # OpenRouter). El orden y los modelos estan en agente/llm-chain.json; los
+      # proveedores sin API key en los secrets se saltan solos.
+      # El modelo solo devuelve texto: no tiene Bash, no toca archivos y no ve
+      # el repo mas alla de lo que le pegamos en el prompt (slugs + titulos).
+      # Si TODOS se quedan sin cuota, la corrida termina en verde sin paginas
+      # nuevas (skip=true) y se avisa en el resumen.
+      - name: Investigar y estructurar (cadena de LLMs gratis)
+        id: llm
         env:
           GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
-          MODEL: ${{ inputs.modelo || 'openai/gpt-oss-120b' }}
-        run: |
-          set -o pipefail
-          PROMPT_BASE="$(cat agente/PROMPT-groq.md)"
-          SLUGS="$(cat "$RUNNER_TEMP/slugs.txt")"
-
-          USER_MSG=$(PB="$PROMPT_BASE" SL="$SLUGS" node -e '
-            const base = process.env.PB;
-            const slugs = process.env.SL;
-            const hoy = new Date().toISOString().slice(0,10);
-            const msg = base +
-              "\n\nFecha de hoy: " + hoy +
-              "\n\nPáginas ya publicadas (slug — título). No repitas estos temas ni propongas variantes:\n" + slugs +
-              "\n\nHaz el Paso 1 ahora: investiga y escribe tus hallazgos en texto, con URLs completas.";
-            process.stdout.write(JSON.stringify(msg));
-          ')
-
-          ATTEMPT=0
-          MAX_ATTEMPTS=4
-          while :; do
-            ATTEMPT=$((ATTEMPT+1))
-            curl -sS https://api.groq.com/openai/v1/chat/completions \
-              -H "Authorization: Bearer $GROQ_API_KEY" \
-              -H "Content-Type: application/json" \
-              -d '{
-                "model": "'"$MODEL"'",
-                "tools": [{"type": "browser_search"}],
-                "reasoning_effort": "low",
-                "temperature": 1,
-                "top_p": 1,
-                "messages": [{"role": "user", "content": '"$USER_MSG"'}]
-              }' > "$RUNNER_TEMP/groq-paso1-raw.json"
-
-            # rate_limit_exceeded: el nivel gratis de Groq nos hizo esperar antes (corridas #1 y #2).
-            # output_parse_failed: falla propia del parser de tool-calls de Groq con gpt-oss-120b +
-            # browser_search (corrida #3, 28-09-2026) — el modelo genera un fragmento tipo
-            # "Open result 3 (...)" que el parser no logra interpretar. Es ruido de generacion,
-            # no un problema de nuestro prompt ni de los datos, asi que reintentar alcanza.
-            if grep -qE '"code":"(rate_limit_exceeded|output_parse_failed|json_validate_failed)"' "$RUNNER_TEMP/groq-paso1-raw.json" && [ "$ATTEMPT" -lt "$MAX_ATTEMPTS" ]; then
-              MOTIVO="$(grep -o '"code":"[a-z_]*"' "$RUNNER_TEMP/groq-paso1-raw.json" | head -1)"
-              echo "Groq: $MOTIVO (paso 1), intento $ATTEMPT de $MAX_ATTEMPTS. Esperando 20s..."
-              sleep 20
-              continue
-            fi
-            break
-          done
-
-          # Extrae solo el texto de la respuesta para pasarlo al paso 2.
-          node -e '
-            const fs = require("fs");
-            const r = JSON.parse(fs.readFileSync(process.env.RUNNER_TEMP + "/groq-paso1-raw.json","utf8"));
-            const texto = r.choices && r.choices[0] && r.choices[0].message && r.choices[0].message.content;
-            if (!texto) {
-              console.error("Groq no devolvió contenido en el paso 1. Respuesta cruda:");
-              console.error(JSON.stringify(r).slice(0, 1000));
-              process.exit(1);
-            }
-            fs.writeFileSync(process.env.RUNNER_TEMP + "/investigacion.txt", texto);
-          '
-          cp "$RUNNER_TEMP/investigacion.txt" "$RUNNER_TEMP/agente-log.txt"
-
-      # Pausa antes del Paso 2: la busqueda web del Paso 1 gasta casi todo el
-      # presupuesto de tokens por minuto del nivel gratis de Groq. Sin esta
-      # pausa, el Paso 2 puede chocar con el limite por unos segundos
-      # (paso exactamente lo que ocurrio en la corrida #1, 26-09-2026).
-      # 20s no alcanzo en la practica (corridas #1 y #2, 26 y 28-09-2026):
-      # el Paso 1 por si solo consume casi todo el presupuesto de 8000
-      # tokens/minuto de Groq, y esa ventana es rodante — hay que esperar
-      # cerca de un minuto completo para que se libere espacio de verdad.
-      - name: Pausa para no chocar con el limite de tokens por minuto
-        run: sleep 50
-
-      # Paso 2: sin herramientas, se le pide convertir el texto del paso 1 en
-      # el JSON exacto que espera add-pages.js. Modo JSON forzado.
-      #
-      # reasoning_effort "low" + max_completion_tokens: gpt-oss-120b es un modelo
-      # de razonamiento y en Groq los tokens de razonamiento salen del MISMO
-      # presupuesto que el texto final. Sin "low" (que si estaba en el Paso 1),
-      # el modelo se gastaba la salida pensando y cortaba el JSON a la mitad; el
-      # modo JSON lo rechazaba entero con json_validate_failed ("max completion
-      # tokens reached before generating a valid document"). Eso boto la corrida
-      # #6 (28-09-2026). 6000 deja margen para 3 paginas sin pasarse del limite
-      # de 8000 tokens/minuto del nivel gratis.
-      - name: Paso 2 — Estructurar en JSON (sin búsqueda)
-        env:
-          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
-          MODEL: ${{ inputs.modelo || 'openai/gpt-oss-120b' }}
-        run: |
-          set -o pipefail
-          SCHEMA="$(cat agente/JSON-SCHEMA-groq.md)"
-          INVESTIGACION="$(cat "$RUNNER_TEMP/investigacion.txt")"
-
-          USER_MSG=$(SCH="$SCHEMA" INV="$INVESTIGACION" node -e '
-            const schema = process.env.SCH;
-            const inv = process.env.INV;
-            process.stdout.write(JSON.stringify(schema + "\n" + inv));
-          ')
-
-          ATTEMPT=0
-          MAX_ATTEMPTS=4
-          while :; do
-            ATTEMPT=$((ATTEMPT+1))
-            curl -sS https://api.groq.com/openai/v1/chat/completions \
-              -H "Authorization: Bearer $GROQ_API_KEY" \
-              -H "Content-Type: application/json" \
-              -d '{
-                "model": "'"$MODEL"'",
-                "response_format": {"type": "json_object"},
-                "reasoning_effort": "low",
-                "max_completion_tokens": 6000,
-                "messages": [{"role": "user", "content": '"$USER_MSG"'}]
-              }' > "$RUNNER_TEMP/groq-paso2-raw.json"
-
-            if grep -qE '"code":"(rate_limit_exceeded|output_parse_failed|json_validate_failed)"' "$RUNNER_TEMP/groq-paso2-raw.json" && [ "$ATTEMPT" -lt "$MAX_ATTEMPTS" ]; then
-              MOTIVO="$(grep -o '"code":"[a-z_]*"' "$RUNNER_TEMP/groq-paso2-raw.json" | head -1)"
-              echo "Groq: $MOTIVO (paso 2), intento $ATTEMPT de $MAX_ATTEMPTS. Esperando 20s..."
-              sleep 20
-              continue
-            fi
-            break
-          done
-
-          node -e '
-            const fs = require("fs");
-            const r = JSON.parse(fs.readFileSync(process.env.RUNNER_TEMP + "/groq-paso2-raw.json","utf8"));
-            const texto = r.choices && r.choices[0] && r.choices[0].message && r.choices[0].message.content;
-            if (!texto) {
-              console.error("Groq no devolvió contenido en el paso 2. Respuesta cruda:");
-              console.error(JSON.stringify(r).slice(0, 1000));
-              process.exit(1);
-            }
-            fs.writeFileSync(process.env.RUNNER_TEMP + "/respuesta-cruda.json", texto);
-          '
-
-          {
-            echo "===== PASO 1: investigación ====="
-            cat "$RUNNER_TEMP/investigacion.txt"
-            echo
-            echo "===== PASO 2: JSON propuesto ====="
-            cat "$RUNNER_TEMP/respuesta-cruda.json"
-          } > "$RUNNER_TEMP/agente-log.txt"
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          CEREBRAS_API_KEY: ${{ secrets.CEREBRAS_API_KEY }}
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+          MODELO: ${{ inputs.modelo }}
+        run: node scripts/llm-chain.js
 
       # Limpia la respuesta, la normaliza, y le pone tope de 3 items.
       - name: Procesar y validar la respuesta del modelo
+        if: steps.llm.outputs.skip != 'true'
         run: |
           node scripts/process-agent-output.js \
             "$RUNNER_TEMP/respuesta-cruda.json" \
@@ -209,6 +70,7 @@ jobs:
       # add-pages.js ya corre validateItem() de guard.js por cada item, y
       # nunca pisa ni borra páginas existentes.
       - name: Agregar páginas propuestas a data/pages.json
+        if: steps.llm.outputs.skip != 'true'
         run: node scripts/add-pages.js "$RUNNER_TEMP/agent-output.json"
 
       - name: Subir log del agente
