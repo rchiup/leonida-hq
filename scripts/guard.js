@@ -14,6 +14,11 @@ import { pathToFileURL } from "node:url";
 export const ALLOWED_SOURCES = [
   "rockstargames.com",
   "take2games.com",
+  // Take-Two publica sus comunicados oficiales en su host de relaciones con
+  // inversionistas, no en take2games.com. Va el host COMPLETO a proposito:
+  // gcs-web.com es un proveedor de IR compartido y poner el sufijo abriria
+  // la puerta a los comunicados de cualquier otra empresa que lo use.
+  "taketwointeractivesoftwareinc.gcs-web.com",
   "ign.com",
   "eurogamer.net",
   "gamespot.com",
@@ -58,7 +63,12 @@ export function validateItem(it) {
   if (/\bGTA\b|Grand Theft Auto/i.test(it.slug || "") ) errs.push("el slug no puede llevar la marca (regla 3)");
 
   const d = it.description || "";
-  if (d.length < 140 || d.length > 160) errs.push(`description de ${d.length} caracteres (debe ser 140-160)`);
+  // 140-170: Google corta el snippet cerca de los 155-160 caracteres, asi que
+  // pasarse por poco solo significa que se muestra con puntos suspensivos. Botar
+  // una pagina entera por 6 caracteres de mas es perder trabajo bueno por nada,
+  // y recortar el texto a maquina deja frases cojas, que es peor que el corte
+  // de Google. Se acepta el margen y el prompt pide apuntar a 150.
+  if (d.length < 140 || d.length > 170) errs.push(`description de ${d.length} caracteres (debe ser 140-170)`);
 
   if (typeof it.verified !== "boolean") errs.push("verified debe ser true o false");
 
