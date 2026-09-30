@@ -30,7 +30,18 @@ if (!file) {
   process.exit(1);
 }
 
-const input = JSON.parse(readFileSync(file, "utf8"));
+// Los modelos a veces devuelven guiones "no separables" (U+2011) y otros
+// guiones raros. Es formato, no fondo: se normalizan a "-" en vez de rechazar.
+const limpiarGuiones = (v) =>
+  typeof v === "string"
+    ? v.replace(/[\u2010\u2011\u2012]/g, "-")
+    : Array.isArray(v)
+      ? v.map(limpiarGuiones)
+      : v && typeof v === "object"
+        ? Object.fromEntries(Object.entries(v).map(([k, x]) => [k, limpiarGuiones(x)]))
+        : v;
+
+const input = limpiarGuiones(JSON.parse(readFileSync(file, "utf8")));
 const incoming = Array.isArray(input) ? input : input.items;
 if (!Array.isArray(incoming)) {
   console.error("El archivo debe ser un array o un objeto con \"items\".");

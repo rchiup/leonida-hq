@@ -41,9 +41,48 @@ const BANNED_PATTERNS = [
   [/\.(png|jpe?g|webp|gif)(["'?#\s]|$)/i, "enlaza o incrusta un archivo de imagen (regla 7)"],
 ];
 
-const CRITICAL_FILES = ["public/googlebce07ec590b3fc8d.html"];
+const CRITICAL_FILES = [
+  "public/googlebce07ec590b3fc8d.html",
+  "public/google2f81ceee882d8fa6.html",
+];
 const AGENT_WRITABLE = /^data\/[^/]+\.json$/;
 const AGENT_MAX_NEW_PAGES = 3;
+
+
+// ---------- Idioma ----------
+// El sitio es en ingles. El agente investiga en español y a veces deja el texto
+// de las paginas en español (run #9, 30-09-2026: 3 paginas salieron asi). No hay
+// que adivinar el idioma con una libreria: se cuentan palabras funcionales de
+// cada idioma. Probado contra las 19 paginas publicadas: las en ingles dan 0-1
+// palabras españolas y las 3 en español dan 35-44, asi que el margen es enorme.
+const ES_WORDS = new Set(
+  ("de la el los las que en del con por para una un se es su al como más pero sus le ya o este sí " +
+   "porque esta entre cuando muy sin sobre también me hasta hay donde quien desde todo nos durante " +
+   "ni contra otros ese eso ante ellos e esto antes algunos qué unos yo otro otras otra él tanto esa " +
+   "estos mucho quienes nada muchos cual poco ella estar estas algunas algo nosotros ha han fue ser " +
+   "son será serán está están lanzamiento fecha según además aún todavía tiene tienen").split(" ")
+);
+const EN_WORDS = new Set(
+  ("the of and to in is that for it as was with on are by this be at from or an not have has will " +
+   "been which their its also but they were his her than into can would about after before over only").split(" ")
+);
+
+export function langScore(text) {
+  const words = String(text).toLowerCase().replace(/<[^>]+>/g, " ").match(/[a-záéíóúñü]+/g) || [];
+  let es = 0, en = 0;
+  for (const w of words) {
+    if (ES_WORDS.has(w)) es++;
+    if (EN_WORDS.has(w)) en++;
+  }
+  const accents = (String(text).match(/[áéíóúñ¿¡]/gi) || []).length;
+  return { es, en, accents };
+}
+
+/** true si el texto parece estar en español. */
+export function looksSpanish(text) {
+  const { es, en, accents } = langScore(text);
+  return (es >= 5 && es > en) || accents >= 3;
+}
 
 const hostOf = (src) =>
   String(src).replace(/^https?:\/\//i, "").replace(/^www\./i, "").split(/[/?#]/)[0].toLowerCase();
@@ -92,6 +131,11 @@ export function validateItem(it) {
       if (!isAllowedSource(s)) errs.push(`fuente no admitida para verified:true: ${s}`);
     }
   }
+
+  const prose = [it.title, it.description, ...(Array.isArray(it.sections) ? it.sections.flatMap((s) => [s.h, s.p]) : [])]
+    .filter(Boolean)
+    .join(" ");
+  if (looksSpanish(prose)) errs.push("el texto esta en español: todo el contenido debe ir en ingles");
 
   const blob = JSON.stringify(it);
   for (const [re, why] of BANNED_PATTERNS) if (re.test(blob)) errs.push(why);
