@@ -47,6 +47,9 @@ const CRITICAL_FILES = [
 ];
 const AGENT_WRITABLE = /^data\/[^/]+\.json$/;
 const AGENT_MAX_NEW_PAGES = 3;
+// Paginas nuevas del agente: minimo de palabras en las secciones. Las de ~150 palabras
+// son contenido delgado (el sitio ya recibio un spam update); mejor 0 paginas que una floja.
+export const AGENT_MIN_WORDS = 250;
 
 
 // ---------- Idioma ----------
@@ -115,7 +118,7 @@ export const isCastTopic = (it) =>
   CAST_RE.test(`${String(it.slug || "").replace(/-/g, " ")} ${it.title || ""} ${it.description || ""}`);
 
 /** Devuelve la lista de problemas de un item de pages.json (vacia = ok). */
-export function validateItem(it) {
+export function validateItem(it, { minWords = 0 } = {}) {
   const errs = [];
   if (!it || typeof it !== "object") return ["no es un objeto"];
 
@@ -144,6 +147,11 @@ export function validateItem(it) {
     it.sections.forEach((s, i) => {
       if (!s.h || !s.p) errs.push(`seccion ${i + 1} sin h o p`);
     });
+  }
+
+  if (minWords > 0 && Array.isArray(it.sections)) {
+    const palabras = it.sections.map((s) => `${s.h || ""} ${s.p || ""}`).join(" ").trim().split(/\s+/).filter(Boolean).length;
+    if (palabras < minWords) errs.push(`contenido demasiado corto: ${palabras} palabras (minimo ${minWords}). Sin material para eso, mejor no publicar la pagina`);
   }
 
   const sources = Array.isArray(it.sources) ? it.sources : [];
@@ -206,7 +214,8 @@ function main() {
     // Las paginas anteriores al guard no tienen sources; solo se exige a lo nuevo o editado.
     const touched = before.get(p.slug) !== JSON.stringify(p);
     if (!touched) continue;
-    for (const e of validateItem(p)) problems.push(`${p.slug}: ${e}`);
+    const nueva = agent && !before.has(p.slug);
+    for (const e of validateItem(p, { minWords: nueva ? AGENT_MIN_WORDS : 0 })) problems.push(`${p.slug}: ${e}`);
   }
 
   if (agent) {

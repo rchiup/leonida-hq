@@ -22,7 +22,7 @@
 // que se vea sin tener que abrir los logs aunque este verde.
 
 import { readFileSync, writeFileSync, appendFileSync } from "node:fs";
-import { validateItem } from "./guard.js";
+import { validateItem, AGENT_MIN_WORDS } from "./guard.js";
 
 const file = process.argv[2];
 if (!file) {
@@ -56,7 +56,7 @@ const rechazados = [];
 const validos = [];
 
 for (const it of incoming) {
-  const errs = validateItem(it);
+  const errs = validateItem(it, { minWords: AGENT_MIN_WORDS });
   if (errs.length) {
     rechazados.push({ slug: it.slug || "(sin slug)", errs });
     console.error(`✗ ${it.slug || "(sin slug)"}\n    ${errs.join("\n    ")}`);
