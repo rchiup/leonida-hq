@@ -226,6 +226,53 @@ ${p.sections.map((s, i) => `<section class="prose"><h2>${esc(s.h)}</h2><p>${s.p}
   }), { indexable: p.verified === true });
 }
 
+/* ---------- Privacidad y contacto ---------- */
+// La politica se arma desde site.config.json: solo habla de AdSense o de analytics
+// cuando estan activados, para no declarar algo que el sitio no hace.
+{
+  const adsOn = !!cfg.adsense?.enabled;
+  const cfOn = !!cfg.analytics?.cloudflareToken;
+  const plausibleOn = !!cfg.analytics?.plausibleDomain;
+  const email = cfg.contactEmail ? esc(cfg.contactEmail) : null;
+  const body = `
+<h1>Privacy Policy</h1>
+<p class="lede">Last updated: 2026-10-01.</p>
+<section class="prose"><h2>What this site is</h2>
+<p>${esc(cfg.siteName)} is an unofficial, fan-made reference site about Grand Theft Auto VI. It is not affiliated with Rockstar Games or Take-Two Interactive.</p></section>
+<section class="prose"><h2>Information we collect</h2>
+<p>We do not ask you to create an account, and the site has no comment forms or newsletter. We do not knowingly collect names, email addresses or other personal data from visitors.</p>
+<p>Like any web host, the infrastructure that serves this site (Cloudflare) processes technical data such as IP address, browser type and the pages requested, to deliver the pages and protect them from abuse.</p></section>
+${cfOn || plausibleOn ? `<section class="prose"><h2>Analytics</h2>
+<p>We measure aggregate traffic (page views, referrers, country) with ${cfOn ? "Cloudflare Web Analytics" : ""}${cfOn && plausibleOn ? " and " : ""}${plausibleOn ? "Plausible Analytics" : ""}, privacy-friendly tools that do not use cookies and do not track you across other sites.</p></section>` : ""}
+${adsOn ? `<section class="prose"><h2>Advertising and cookies</h2>
+<p>This site shows ads served by Google AdSense. Third-party vendors, including Google, use cookies to serve ads based on a user's prior visits to this and other websites. Google's use of advertising cookies enables it and its partners to serve ads based on your visit to this site and/or other sites on the Internet.</p>
+<p>You can opt out of personalized advertising in <a href="https://adssettings.google.com" rel="noopener">Google Ads Settings</a>, and learn how Google uses data from sites that use its services at <a href="https://policies.google.com/technologies/partner-sites" rel="noopener">policies.google.com/technologies/partner-sites</a>. Where required by law (for example in the EEA and the UK), we ask for your consent before using cookies for advertising.</p></section>` : ""}
+<section class="prose"><h2>Links to other sites</h2>
+<p>Pages here link to sources such as Rockstar Games, Take-Two and the press. We are not responsible for the content or privacy practices of other sites.</p></section>
+<section class="prose"><h2>Changes</h2>
+<p>If this policy changes, the date above changes with it.</p></section>
+${email ? `<section class="prose"><h2>Contact</h2><p>Questions about this policy: <a href="mailto:${email}">${email}</a>.</p></section>` : ""}`;
+  emit("/privacy/", layout(cfg, {
+    title: "Privacy Policy",
+    description: `How ${cfg.siteName} handles data, cookies and advertising.`,
+    path: "/privacy/",
+    body,
+    breadcrumbs: [{ name: "Home", path: "/" }, { name: "Privacy Policy", path: "/privacy/" }],
+  }));
+
+  if (email) {
+    emit("/contact/", layout(cfg, {
+      title: "Contact",
+      description: `Contact ${cfg.siteName}: corrections, questions and takedown requests.`,
+      path: "/contact/",
+      body: `
+<h1>Contact</h1>
+<section class="prose"><p>Spotted a mistake, want a source added, or need something removed? Write to <a href="mailto:${email}">${email}</a>. Corrections backed by an official source are usually applied quickly.</p></section>`,
+      breadcrumbs: [{ name: "Home", path: "/" }, { name: "Contact", path: "/contact/" }],
+    }));
+  }
+}
+
 /* ---------- Calculadora ---------- */
 {
   const body = `
