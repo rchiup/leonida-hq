@@ -63,6 +63,15 @@ el álbum y el tráiler Extended Look. Una página nueva tiene que aportar un da
 o una pregunta que el sitio todavía no responde; si lo único nuevo es una
 actualización de algo ya publicado, propón 0 páginas.
 
+## Extensión y profundidad
+
+Cada página necesita **al menos ~300 palabras** entre sus cuatro secciones
+(unas 70-100 por sección, en prosa, con fechas, cifras y quién lo dijo). Una
+página de 150 palabras es contenido delgado y se rechaza. Pero **no rellenes**:
+si lo que hay confirmado no da para 300 palabras reales, propón 0 páginas. Más
+largo no significa repetir la misma frase de cuatro maneras: agrega contexto
+verificable (qué se anunció antes, qué cambia, qué dijo la fuente exacta).
+
 ## Idioma
 
 Tus hallazgos del Paso 1 van en español. Pero las páginas que salgan de ellos

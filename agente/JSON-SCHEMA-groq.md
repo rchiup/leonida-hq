@@ -21,6 +21,11 @@ después, con esta forma exacta:
   }
 ]}
 
+Extensión: entre las 4 secciones deben sumar al menos ~300 palabras (70-100 por
+sección, en prosa, con fechas, cifras y quién lo dijo). Menos de 250 palabras se
+rechaza. No rellenes con frases repetidas: si no hay material, devuelve
+{"items": []}.
+
 Si la investigación no trae nada publicable, responde {"items": []}.
 Usa solo URLs que la investigación haya mencionado explícitamente, nunca
 inventadas. Máximo 3 items.
