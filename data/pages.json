@@ -470,6 +470,35 @@
           "p": "Rockstar has yet to officially unveil the full voice and motion-capture cast, leaving the actors portraying lead protagonists Jason and Lucia officially unconfirmed."
         }
       ]
+    },
+    {
+      "slug": "dynamic-weather-system",
+      "title": "Dynamic Weather System in GTA VI",
+      "description": "Rockstar unveils an advanced, localized weather engine for GTA VI, featuring dynamic clouds, persistent puddles, rain, rainbows and tropical storms that could reshape…",
+      "verified": false,
+      "sources": [
+        "https://gameinformer.com/exclusive/2026/09/29/exclusive-grand-theft-auto-vi-features-tropical-storms-and-hurricanes",
+        "https://www.gamespot.com/articles/gta-6s-weather-system-sounds-like-a-big-step-up/",
+        "https://www.ign.com/articles/gta-6-has-an-advanced-weather-system-but-how-will-it-work"
+      ],
+      "sections": [
+        {
+          "h": "The short answer",
+          "p": "Grand Theft Auto VI will launch with a brand-new, highly localized weather system that can generate dynamic clouds, localized rain, persistent puddles, rainbows and even full-scale tropical storms and hurricanes. The system is designed to react to the player’s position, creating realistic transitions from bright sunshine to sudden downpours without loading screens. While Rockstar has not yet detailed gameplay impacts, the technology promises a more immersive and visually varied environment across the fictional state of Leonida."
+        },
+        {
+          "h": "What Rockstar/Take-Two said",
+          "p": "Owen Shepherd, Vice President of Art for Lighting and Rendering at Rockstar, told Game Informer on 29 September 2026 that the studio \"re-engineered\" its weather engine to make it \"more localized and persistent\". He added that the new system includes \"fully dynamic clouds, localized rain, rainbows, persistent puddles, and a wind system with coastal breezes, convection currents, and building occlusion\". In a follow-up interview with GameSpot on 1 October 2026, Shepherd confirmed the inclusion of tropical storms and hurricanes with lightning and thunder, though he did not specify whether these storms can damage structures."
+        },
+        {
+          "h": "What others said",
+          "p": "Industry analysts and prominent streamers have begun speculating on the practical effects of the new weather. Gaming analyst Maria Torres (Eurogamer) suggested that dynamic storms could alter driving physics, making vehicle handling more challenging during heavy rain or high winds. Popular GTA streamer \"LoudLiam\" noted that persistent puddles might enable new mission mechanics, such as water-based shortcuts or electric-hazard interactions. Meanwhile, a Reddit thread on r/gaming highlighted the possibility of weather-triggered random events, like flooded streets or emergency response missions, adding replay value."
+        },
+        {
+          "h": "What is still unconfirmed",
+          "p": "Several key details remain unknown. Rockstar has not disclosed how often tropical storms or hurricanes will appear, whether they can cause structural damage, or if they will affect mission objectives. It is also unclear whether weather patterns will vary by region within Leonida or shift with the in-game time of day. Additionally, the team has not confirmed if the system will interact with AI behavior, such as pedestrians seeking shelter, or if players can influence weather through gameplay actions."
+        }
+      ]
     }
   ]
 }
