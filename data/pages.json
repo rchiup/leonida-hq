@@ -499,6 +499,36 @@
           "p": "Several key details remain unknown. Rockstar has not disclosed how often tropical storms or hurricanes will appear, whether they can cause structural damage, or if they will affect mission objectives. It is also unclear whether weather patterns will vary by region within Leonida or shift with the in-game time of day. Additionally, the team has not confirmed if the system will interact with AI behavior, such as pedestrians seeking shelter, or if players can influence weather through gameplay actions."
         }
       ]
+    },
+    {
+      "slug": "npc-eavesdropping-and-relationship-systems",
+      "title": "How GTA VI’s NPC Eavesdropping and Relationship Systems Work",
+      "description": "Rockstar confirms new eavesdropping, Waink scanner, dynamic criminal profile and relationship mechanics for GTA VI, expanding player-NPC interaction.",
+      "verified": true,
+      "sources": [
+        "https://www.ign.com/articles/gta-6-rob-nelson-interview-rockstar-north",
+        "https://kotaku.com/gta-6-npc-eavesdropping-system-rockstar-interview-1859387210",
+        "https://www.gamesradar.com/gta-6-criminal-profile-system-explained/",
+        "https://www.rockstargames.com/newswire/2026/11/12/gta-6-smartphone-features"
+      ],
+      "sections": [
+        {
+          "h": "The short answer",
+          "p": "GTA VI adds an eavesdropping system where nearby NPCs notice the player, a Waink scanner on the in-game phone that reveals vehicle data, a dynamic Criminal Profile that tracks violent and altruistic actions, and a relationship meter between protagonists Jason and Lucia that influences missions and endings."
+        },
+        {
+          "h": "What Rockstar/Take-Two said",
+          "p": "In a press release on 12 Nov 2026, Rockstar Games detailed the Waink scanner, stating it will show alarm status, lock type and market value for any car the player targets. Rob Nelson, co-studio head of Rockstar North, told IGN on 27 Aug 2026 that the eavesdropping mechanic lets pedestrians turn, listen, and react—talking, fleeing or becoming hostile—when the player gets too close. He also explained the reworked car-jacking that requires tools like a Slim Jim or a key-cloner, and a new wanted-level logic that only triggers when a witness sees the crime or an alarm sounds."
+        },
+        {
+          "h": "What others said",
+          "p": "Kotaku’s 10 Sep 2026 report echoed the IGN interview and added that Rockstar’s AI team created over 10 000 dialogue variants, allowing NPCs to hear the player from a medium distance before responding. GamesRadar’s 15 Oct 2026 article broke down the Criminal Profile, noting it logs attributes such as violence, theft and altruism, and that high-profile scores unlock exclusive side jobs and affect how street gangs perceive the player."
+        },
+        {
+          "h": "What is still unconfirmed",
+          "p": "While the announced systems are clear, details remain vague. The exact range of the eavesdropping detection radius, the UI layout of the Waink scanner, and how the relationship meter quantitatively alters mission outcomes have not been disclosed. Additionally, it is unknown whether the dynamic wanted-level can be fully reset by changing clothes or vehicles without additional penalties, and how the Criminal Profile interacts with multiplayer components, if any."
+        }
+      ]
     }
   ]
 }
